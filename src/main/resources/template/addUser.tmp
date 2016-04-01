@@ -1,0 +1,9 @@
+	<p>尊敬的用户 ${userName}， 您好
+    <p>您的朋友邀请您参加他的团队${teamName}</p>
+	<p>您现在可以
+	<p>1)<a href="${baseUrl}/user/message">使用账号${loginName}登录系统</a>后，接受或者拒绝团队邀请
+	<p>或者
+	<p>2)点击如下链接直接接受邀请
+    <p><a href="${activeUrl}">${activeUrl}</a>
+    <p>如果不接受，直接忽略即可
+    

@@ -1,0 +1,277 @@
+<div id="{{id}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">更改用户信息</h3>
+	</div>
+	<form id="updateUserForm">
+		<div class="modal-body form-horizontal">
+			<div class="control-group">
+	           <label class="control-label">姓名：</label>
+	           <div class="controls">
+	           		<input name="userName"  id="userName"  type="text" />
+	           		<input name="orgUserName" id="orgUserName" type="hidden"/>
+	           		<span id="userName_error" class="error help-inline"></span>
+				</div>
+	     	</div>
+			<div class="control-group">
+	           <label class="control-label nopadding">性别：</label>
+	           <div class="controls">
+	           		<input name="sex" id="sexMale" value="male" checked="checked" type="radio" />男
+					<input name="sex" id="sexFemale" value="female" type="radio" />女
+					<span id="visible_error" class="error help-inline" ></span>
+				</div>
+	     	</div>
+	     	<div class="control-group">
+	           <label class="control-label nopadding">邮件地址：</label>
+	           <div class="controls">
+	           		<span id="userEmail"></span>
+				</div>
+	     	</div>
+	     	<div id="upgradeContent" style="display:none">
+	     	<div class="control-group">
+	           <label class="control-label">办公室：</label>
+	           <div class="controls">
+	           		<input name="office"  id="office"  type="text" />
+					<span id="office_error" class="error help-inline" ></span>
+				</div>
+	     	</div>
+	     	<div class="control-group">
+	           <label class="control-label">办公室电话：</label>
+	           <div class="controls">
+	           		<input name="officePhone"  id="officePhone"  type="text" />
+					<span id="officePhone_error" class="error help-inline"></span>
+				</div>
+	     	</div>
+			<div class="control-group">
+	           <label class="control-label">手机号码：</label>
+	           <div class="controls">
+	           		<input name="telephone"  id="telephone"  type="text" />
+					<span id="telephone_error" class="error help-inline"></span>
+				</div>
+	     	</div>
+			<div class="control-group">
+	           <label class="control-label">职称/职务：</label>
+	           <div class="controls">
+	           		<input name="title"  id="title"  type="text" />
+					<span id="title_error" class="error help-inline"></span>
+				</div>
+	     	</div>
+	     	</div>
+			<div class="control-group" id="visibleDiv" style="disply:none">
+	           <label class="control-label nopadding">是否在<span id="isGroup">组织</span>中显示：</label>
+	           <div class="controls">
+	           		<input name="visible" id="visible" value="true" checked="checked" type="radio" />是
+					<input name="visible" id="unvisible" value="false" type="radio" />否
+					<span id="visible_error"  class="error help-inline"></span>
+				</div>
+	     	</div>
+			<div class="control-group">
+	           <label class="control-label">权重：</label>
+	           <div class="controls">
+	           		<input name="listRank" id="listRank" type="text" />
+					<span id="listRank_error"  class="error help-inline"></span>
+				</div>
+	     	</div>
+	     	<div class="control-group">
+	           <label class="control-label">是否禁用科信：</label>
+	           <div class="controls">
+	           		<input name="disableDchat" value="true" type="radio" />是
+					<input name="disableDchat" value="false" type="radio" />否
+					<span id="disableDchat_error"  class="error help-inline"></span>
+				</div>
+	     	</div>
+	     	<div class="control-group" style="display:none" id="accountStatus">
+	           <label class="control-label nopadding">邮箱账号状态：</label>
+	           <div class="controls">
+	           	<input type="radio" id="accountStatus_normal" name="accountStatus" value="normal"/> 正常
+	           	<input type="radio" id="accountStatus_locked" name="accountStatus" value="locked"/>锁定
+	           	<input type="radio" id="accountStatus_stop" name="accountStatus" value="stop"/>停用
+				</div>
+	     	</div>
+			<p class="hint noIndent"></p>
+			<div class="control-group" style='display:none' id="expireTimeDiv">
+	           <label class="control-label">过期时间：</label>
+	           <div class="controls">
+	           		<input  type="text" name="expireTime" id="expireTime" maxlength="10" />
+					<span id="expireTime_error" ></span>  
+				</div>
+	     	</div>
+			<div class="control-group">
+	           <label class="control-label">自定义1：</label>
+	           <div class="controls">
+	           		<input name="custom1" maxlength=100 id="custom1" type="text" />
+					<span id="custom1_error"  class="error help-inline"></span>
+				</div>
+	     	</div>
+	     	<div class="control-group">
+	           <label class="control-label">自定义2：</label>
+	           <div class="controls">
+	           		<input name="custom2" maxlength=100 id="custom2" type="text" />
+					<span id="custom1_error"  class="error help-inline"></span>
+				</div>
+	     	</div>
+		</div>
+		<div class="modal-footer">
+			<span class="root"><strong>位置：</strong><span id="cs_currentDN"></span></span>
+			<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+			<button type="submit" class="btn btn-primary" id="updateUser">确定</button>
+		</div>
+	</form>
+</div>
+<script>
+	$(document).ready(function(){
+		$("#expireTime").jQdatepicker({ picker: "<img class='picker' style='width:16px;height:16px' align='middle' src='"+vmt.context+"/resource/thirdparty/datepicker/sample-css/cal.gif' alt=''>",applyrule:function(){return true;}});
+
+		
+		var people = vmt.selectedItem.asArray()[0];
+		if(vmt.isGroup){
+			$('#isGroup').html("群组");
+		}
+		if(vmt.isUpgraded){
+			$('#upgradeContent').show();
+		}
+		$('form input').enter(function(event){
+			$('#updateUserForm').submit();
+		})
+		$('input[name=accountStatus]').on('change',function(){
+			var value=$(this).val();
+			$('input[name=visible]').removeAttr("checked");
+			if(value=='locked'||value=='stop'){
+				$('#unvisible').attr("checked","checked");
+				$('#visibleDiv').hide();
+			}else{
+				$('#visible').attr("checked","checked");
+				$('#visibleDiv').show();
+			}
+		});
+		$.post('show',{dn:people.dn}).done(function(data){
+			$('#userName').val(data.name);
+			$('#userEmail').html(data.cstnetId);
+			$('input[name=visible]').removeAttr("checked");
+			$('#expireTime').val(data.expireTime);
+			if(data.visible){
+				$('#visible').attr("checked","checked");
+			}else{
+				$('#unvisible').attr("checked","checked");
+			}
+			$('input[name=sex]').removeAttr("checked");
+			if(data.sex=='male'){
+				$('#sexMale').attr("checked","checked");
+			}else if(data.sex=='female'){
+				$('#sexFemale').attr("checked","checked");
+			}
+			
+			
+			
+			
+			$('#office').val(data.office);
+			$('#officePhone').val(data.officePhone);
+			$('#telephone').val(data.telephone);
+			$('#updateUserForm #title').val(data.title);
+			$('#listRank').val(data.listRank);
+			$('#orgUserName').val(data.name);
+			$('#custom1').val(data.custom1);
+			$('#custom2').val(data.custom2);
+			if(vmt.canEditCoreMail(data.cstnetId)){
+				$('#accountStatus').show();
+				$('#expireTimeDiv').show();
+			}
+			if(data.accoutStatus=='normal'){
+				$('#visibleDiv').show();
+			}
+			$('#accountStatus_'+data.accountStatus).attr("checked","checked");
+			if(data.expireTime&&data.expireTime<getTodayStr()){
+				$('#accountStatus_locked').click();
+			}
+			$('input[name=disableDchat][value='+data.disableDchat+']').attr('checked','checked');
+			$('#cs_currentDN').html((data.currentDisplay||' ').replace(/,/gm,"&nbsp;/&nbsp;"));
+		});
+		
+		
+		$('#updateUserForm').validate({
+			submitHandler:function(form){
+				var visibleValue=$('input[name=visible]:checked').val();
+				$.post('update',{
+					'dn':people.dn,
+					'name':$("#userName").val(),
+					'listRank':$('#listRank').val(),
+					'visible':visibleValue,
+					'sex':$('input[name=sex]:checked').val(),
+					'office':$('#office').val(),
+					'officePhone':$('#officePhone').val(),
+					'telephone':$('#telephone').val(),
+					'title':$('#updateUserForm #title').val(),
+					'orgUserName':$('#orgUserName').val(),
+					'accountStatus':$('input[name="accountStatus"]:checked').val(),
+					'expireTime':$('#expireTime').val(),
+					'disableDchat':$('input[name=disableDchat]:checked').val(),
+					'custom1':$('#custom1').val(),
+					'custom2':$('#custom2').val()
+					
+				}).done(function (data){
+					if(data){
+						$('#{{id}}').modal("hide");
+						if(vmt.from=='index2'){
+							var columns=$("#columnsFrame div.column");
+							var cLi=$("#columnsFrame .column:last").find("ul>li.active");
+							cLi.find("a").html($("#userName").val());
+							if(visibleValue=='true'){
+								cLi.find("i.icon-user").removeClass("hideNode");
+							}else{
+								cLi.find("i.icon-user").addClass("hideNode");
+							}
+							cLi.click();
+						}
+						var searchResult=$('#slider:visible');
+						if(searchResult.length){
+							$icon=searchResult.find('li.search_item i.icon-ok');
+							
+							$icon.click();
+						}
+						
+					}
+				})
+			},
+			rules:{
+				userName:{
+					required:true,
+				},
+				listRank:{
+					range:[0,2147483647],required:true,number:true,digits:true
+				},
+				expireTime:{
+					isYYYYMMDD:true,
+					doMySelf:{
+						call:function(value){
+							if(value){
+								return getTodayStr()<value;
+							}
+							return true;
+						}
+					}
+				}
+				
+			},
+			messages:{
+				userName:{required:'用户姓名不允许为空'},
+				listRank:{ 
+					 required:"权重不允许为空",
+					 range:"权重超出允许范围",
+					 number:"权重必须为数字",
+					 digits:"只允许输入整数"}
+				,expireTime:{
+					doMySelf:'日期不能早于当天'
+				}
+				
+					 
+			},
+			errorPlacement: function(error, element){
+				var sub="_error";
+				var errorPlaceId="#"+$(element).attr("name")+sub;
+				$(errorPlaceId).html("");
+				error.appendTo($(errorPlaceId));
+			}
+		});	
+		
+	})
+</script>

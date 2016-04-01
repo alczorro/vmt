@@ -1,0 +1,109 @@
+<div id="{{id}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
+	<div class="modal-header"> 
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button> 
+		<h3 id="myModalLabel">创建<span id="orgTitle" style="display:none">组织机构或者</span>群组</h3> 
+	</div> 
+	<form id="createTeamForm" method="post">
+	<div class="modal-body"> 
+		<p>请选择团队类型</p> 
+		<div id="divOrg" style="display:none">
+			<input id="orgRadio"  name="type" value="org" checked="checked" type="radio"/>组织机构 
+			<p class="hint">组织机构是您在工作中的机构设置，您可以在组织机构内创建部门，添加成员。</p> 
+		</div>
+		<input id="groupRadio" name="type"  value="group" type="radio"/>群组 
+		<p class="hint">基于兴趣、讨论需要而创建的组。</p> 
+		<p>请输入团队名称：</p> 
+		<input id="teamName" type="text" name="teamName" style="margin-left:2em"/> 
+		<span id="teamName_error">
+		</span>
+		<p>请输入团队代号：</p> 
+		<input id="teamSymbol" type="text" name="teamSymbol" style="margin-left:2em"/> 
+		<span id="teamSymbol_error">
+		</span>
+		<p class="hint sole">团队代号唯一，提交后不可更改，不作为显示使用。</p>
+		<div style="">
+		<p>团队权限：</p> 
+			<span class="option"><input checked="checked" value="privateNotAllow" name="privilege"  type="radio" />私密</span> 
+			<span class="option"><input name="privilege" type="radio" value="openRequired" />公开需审核</span> 
+			<span class="option"><input name="privilege" type="radio" value="allOpen" />完全公开</span> 
+		</div>
+	</div> 
+	<div class="modal-footer"> 
+		<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button> 
+		<button class="btn btn-primary">确定</button> 
+	</div> 
+	</form>
+</div>
+<script>
+$(document).ready(function(){
+	$("#teamName").on('blur',function(){
+		var destValue=$('#teamSymbol').val();
+		if($.trim(destValue)==''){
+			var $teamName=$(this).val();
+			$.post(vmt.context+'/user/jq/getPinyin',{'word':$teamName}).done(function(data){
+				$('#teamSymbol').val(data);
+			})
+			$('#teamSymbol').val($(this).val());
+		}
+	});
+	$.post(vmt.context+'/user/isExists').done(function(data){
+		if(data){
+			$('#divOrg').remove();
+			$('#groupRadio').attr("checked","checked");
+		}else{
+			$('#divOrg').show();
+			$('#orgTitle').show();
+		}
+	})
+	$('#teamName,#teamSymbol').enter(function(event){
+			$("#teamName").blur();
+			$("#createTeamForm").submit();
+			
+		})
+	$("#createTeamForm").validate({
+		submitHandler:function(form){
+			var val=$("input[name=type]:checked").val();
+			$(form).attr("action",vmt.context+"/user/"+val+"/create");
+			form.submit();
+		},
+		rules:{
+			teamName:{
+				required:true,
+				doMySelf:{
+					call:function(value){
+						switch($('input[name=type]:checked').val()){
+							case 'org':return nodeIdOK(value);
+							case "group":return groupNameOK(value);
+							default:return false;
+						}
+						return false;
+					}
+				}
+			},
+			teamSymbol:{
+					required:true,
+					remote:{
+						 type: "POST",
+						 url: vmt.context+'/user/jq/canTeamSymbolUse',
+						 data:{ 
+								 'type':function(){return $("input[name=type]:checked").val()}
+					  		}
+						 },
+						 specialLetter:true,
+						 noZh:true
+				}
+			
+		},
+		messages:{
+			teamName:{required:'请输入团队名称',doMySelf:"请不要输入特殊字符"},
+			teamSymbol:{required:'请输入团队代号',remote:'团队代号已被使用'}
+		},
+		errorPlacement: function(error, element){
+			var sub="_error";
+			var errorPlaceId="#"+$(element).attr("name")+sub;
+			$(errorPlaceId).html("");
+			error.appendTo($(errorPlaceId));
+		}
+	});	
+});
+</script>

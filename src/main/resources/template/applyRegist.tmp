@@ -1,0 +1,9 @@
+	<p>您好,有新的电子邮箱注册申请
+    <p>电子邮箱: ${email}
+	<p>姓名:${trueName}
+	<p>员工号:${custom1}
+	<p>ARP系统用户名:	${custom2}
+	<p>联系电话:${phone}
+	<p>联系邮箱:${contractEmail}
+	<p>其他:${other}
+	<p><a href="${url}">请点击这里查看</a>

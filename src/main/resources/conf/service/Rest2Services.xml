@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ServiceConfig>
+	<service>
+		<name>Group</name>
+		<class>net.duckling.vmt.service.rest.RestGroupServiceImpl</class>
+	</service>
+	<service>
+		<name>Org</name>
+		<class>net.duckling.vmt.service.rest.RestOrgServiceImpl</class>
+	</service>
+	<service>
+		<name>User</name>
+		<class>net.duckling.vmt.service.rest.RestUserServiceImpl</class>
+	</service>
+	<service>
+		<name>Message</name>
+		<class>net.duckling.vmt.service.rest.RestMessageServiceImpl</class>
+	</service>
+	<filter>
+		<name>APIFilter</name>
+		<class>net.duckling.vmt.web.filter.RestFilter</class>
+		<!-- ugly!!! if not param ,throws Nullpointer ,shit -->
+		<init-param>
+			<param-name>ipconfig</param-name>
+			<param-value>accessIPs</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter>APIFilter</filter>
+		<service>Org</service>
+		<service>Group</service>
+		<service>User</service>
+		<service>Message</service>
+	</filter-mapping>
+</ServiceConfig>

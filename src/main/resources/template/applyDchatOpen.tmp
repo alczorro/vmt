@@ -1,0 +1,5 @@
+<p>用户:${userName}(${cstnetId})申请开通科信
+<p>组织名称:${teamName}
+<p>域名:${domains}
+<p>
+<a href="${url}">点击这里查看</a>

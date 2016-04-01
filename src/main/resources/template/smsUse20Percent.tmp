@@ -1,0 +1,6 @@
+<p>短信组【${groupName}】短信余额不充足：
+<p>短信总数：${count}
+<p>使用总数：${used}
+<p>剩余短信：${last}
+<p>
+<a href="${baseUrl}/user/gm?func=smsManage">点击这里查看</a>

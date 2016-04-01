@@ -1,0 +1,279 @@
+<style>
+label {display:inline-block;}
+</style>
+<div id="{{id}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">新增邮箱账号</h3>
+	</div>
+
+		<div class="modal-body sub-main" style="padding:0">
+			<div class="source-choose">
+				<ul class="source-list">
+					<li class="active" id="one"><a href="#">添加一个邮箱账号</a></li>
+					<li id="group"><a href="#">添加多个邮箱账号</a></li>
+				</ul>
+				<div id="one-c" class="addEmail">
+					<form id="createUser" style="margin:0">
+					<input type="hidden" name="domain" id="domain"/>
+					<input type="hidden" name="dn" id="dn"/>
+					<p>邮件地址：</p>
+					<input name="email"  id="email" type="text" maxlength="20"/><span id="domainDisplay"></span>
+					<span id="email_error" class="error help_inline"></span>
+					<p>真实姓名：</p>
+					<input name="name" id="name" type="text" maxlength="20" />
+					<span id="name_error" class="error help_inline"></span>
+					<p>密码：</p>
+					<input name="password" id="password" type="password" maxlength="20" />
+					<span id="password_error" class="error help_inline"></span>
+					<p>重新输入密码：</p>
+					<input name="repassword" id="repassword" type="password" maxlength="20" />
+					<span id="repassword_error" class="error help_inline"></span>
+					<p class="hint noIndent"></p>
+					<p>过期时间：</p>
+					<input  type="text" name="expireTime" id="expireTime"  maxlength="10" />
+					<span id="expireTime_error" class="error help_inline"></span>
+					</form>  
+				</div>
+				<div id="group-c" class="addEmail" style="display:none">
+					<form id="batchCreateUser" style="margin:0">
+						<p><span class="error" style="font-size:12px;">如您需要批量添加更多用户信息，请直接使用<a id="batchInsert" target="_blank">批量导入</a>功能进行创建。</span>
+						<p>邮件地址：<span style="color:#999;font-size:12px;">（一行一个邮箱账号，格式：“xxx@cstnet.cn,张三”或者“xxx,张三”）</span></p>
+						<textarea name="batchEmail"  id="batchEmail" name="batchEmail" maxlength="500" style="resize:none; width:20em; height:6em"></textarea>
+						<span id="batchEmail_error"></span>
+						<div id="batchEmail_result" style="display:none; font-size:12px; background:#eef; border-radius:5px; padding:1em; width:22.5em"></div>
+						<p>初始密码：</p>
+						<input name="initPassword" id="initPassword" type="password" maxlength="20" />
+						<span id="initPassword_error" ></span>
+						<p class="hint noIndent"></p>
+						<p>过期时间：</p>
+						<input  type="text" name="batchExpireTime" id="batchExpireTime"  maxlength="10" />
+						<span id="batchExpireTime_error" ></span>  
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<span class="root"><strong>位置：</strong><span id="cs_currentDN"></span></span>
+			<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+			<button type="submit" class="btn btn-primary" id="addCoreMailBtn">确定</button>
+		</div>
+</div>
+<script>
+	$(document).ready(function(){
+		$('#addCoreMailBtn').die('click').live('click',function(){
+			$('form:visible').submit();
+		});
+		
+		//点击source-list显示对应的div
+		$("ul.source-list li").die('click').live("click",function(){
+			var name = $(this).attr("id");
+			var divName = name + "-c";
+			$(this).parent().parent("div.source-choose").children("div").hide();
+			$('#' + name + '-c').show();
+			$("ul.source-list li.active").removeClass("active");
+			$(this).addClass("active");
+		})
+		$('#batchInsert').attr('href',vmt.context+'/user/batch/show?func=insert&dn='+encodeURIComponent(vmt.currTeam.dn));
+		
+		$("#expireTime").jQdatepicker({ picker: "<img class='picker' style='width:16px;height:16px' align='middle' src='"+vmt.context+"/resource/thirdparty/datepicker/sample-css/cal.gif' alt=''>",applyrule:function(){return true;}});
+		
+		var lastDepart=$(document).data("currentDN");
+		$.post('common/getDisplay',{dn:lastDepart}).done(function(data){
+			var activeNodeName=decodeURIComponent(data).replace(/,/gm,"&nbsp;/&nbsp;");
+			$('#cs_currentDN').html(activeNodeName);
+		});
+		$('#dn').val(lastDepart);
+		var domain=''
+		$.post('getDomain',{dn:lastDepart}).done(function(data){
+			domain+="@"+data;
+			$('#domain').val(data);
+			$('#domainDisplay').html(domain);
+		});
+		
+		function doTask(index,params){
+			if(index>=params.length){
+				return;
+			}
+			var postData={
+					email:params[index][0].split('@')[0],
+					domain:params[index][0].split('@')[1],
+					name:params[index][1],
+					password:$('#initPassword').val(),
+					expireTime:$('#batchExpireTime').val(),
+					dn:lastDepart
+			};
+			$.post("addCoreMail",postData).done(function(data){
+					var content=(index+1)+'.'+postData.email+"@"+postData.domain;
+					if(data.flag){
+						content+=",<span class='success'>创建成功</span>!";
+					}else{
+						content+="," + "<span class='error'>" + data.desc + "</span>";
+					}
+					content+="<br>"
+					$('#batchEmail_result').show().append(content); 
+					doTask(++index,params);
+			});
+		}
+		var batchValues=null;
+		$('#batchCreateUser').validate({  
+			submitHandler:function(form){
+				var batchEmail=$(form,"input[name=batchEmail]").val();
+				if(batchValues.length>0){
+					$('#batchEmail_result').empty();
+					doTask(0,batchValues);
+				}
+			},
+			rules:{
+				batchEmail:{
+					required:true,
+					doMySelf:{
+						call:function(value){
+							var batch=value.split("\n");
+							if(batch.length==0){
+								return false;
+							}
+							var lines=[];
+							$.each(batch,function(i,n){
+								var line=$.trim(n);
+								if(line!=''){
+									var emailAndName=line.split(',');
+									if(emailAndName
+										&&emailAndName.length==2
+										&&emailAndName[0]
+										&&coreMailEmailFunc(emailAndName[0])
+										&&emailAndName[1]
+										&&emailAndName[0].indexOf('@')>0){
+										lines.push([$.trim(emailAndName[0]),$.trim(emailAndName[1])]);
+									}
+								}
+							});
+							if(lines.length==0){
+								return false;
+							}
+							batchValues=lines;
+							return true;
+						}
+					}
+				},
+				initPassword:{ 
+					required:true,minlength:8,
+					passwordAllSmall:true,
+					passwordAllNum:true,
+					passwordAllBig:true,
+					passwordHasSpace:true},
+				batchExpireTime:{
+					isYYYYMMDD:true,
+					doMySelf:{
+						call:function(value){
+							if(value){
+								return getTodayStr()<value;
+							}
+							return true;
+						}
+					}
+				}
+			},
+			messages:{
+				batchEmail:{required:'请输入邮箱',doMySelf:'格式错误'},
+				initPassword:{ 
+					 required:"请输入密码",
+					 minlength:"密码长度最少为8位"
+				},
+				batchExpireTime:{
+					doMySelf:'日期不能早于当天'
+				}
+				
+			},
+			errorPlacement: function(error, element){
+				var sub="_error";
+				var errorPlaceId="#"+$(element).attr("name")+sub;
+				$(errorPlaceId).html("");
+				error.appendTo($(errorPlaceId));
+				$('#batchEmail_result').empty().hide();
+			}
+		});
+		
+		$("#createUser").validate({
+			submitHandler:function(form){
+				$.post("addCoreMail",$(form).serialize()).done(function(data){
+					if(data.flag){
+						$('#{{id}}').modal("hide");
+						var columns=$("#columnsFrame div.column");
+						if(columns.size()<2){
+							window.location.reload();
+							return
+						}
+						$("#columnsFrame .column:last ").prev().find("ul>li.active").click();
+					}else{
+						alert(data.data.desc);
+					}
+				});
+			},
+			rules:{
+				email:{
+					required:true,
+					remote:{
+						 type: "POST",
+						 url: 'jq/canEmailUse',
+						 data:{ 
+								 'domain':function(){
+									 return domain;
+							}
+					  	}
+					}, 
+					coreMailStart:true,
+					coreMailUserName:true
+				},
+				name:{
+					required:true
+				},
+				password:{required:true,minlength:8,
+					 passwordNotEquals:{
+						 notEquals:function(){
+							 return $('#email').val();
+						 }
+					},
+					 passwordAllSmall:true,
+					 passwordAllNum:true,
+					 passwordAllBig:true,
+					 passwordHasSpace:true},
+				repassword:{required:true,equalTo:"#password"},
+				expireTime:{
+					isYYYYMMDD:true,
+					doMySelf:{
+						call:function(value){
+							if(value){
+								return getTodayStr()<value;
+							}
+							return true;
+						}
+					}
+				}
+				
+			},
+			messages:{
+				email:{required:'请输入邮箱',remote:'邮箱已被使用'},
+				name:{required:'请输入真实姓名',remote:'部门代号已被使用'},
+				password:{ 
+					 required:"请输入密码",
+					 minlength:"密码长度最少为8位"
+				},
+				repassword:{ 
+					 required:"请重新输入密码",
+					 equalTo:"两次输入的密码不一致"
+				},
+				expireTime:{
+					doMySelf:'日期不能早于当天'
+				}
+				
+			},
+			errorPlacement: function(error, element){
+				var sub="_error";
+				var errorPlaceId="#"+$(element).attr("name")+sub;
+				$(errorPlaceId).html("");
+				error.appendTo($(errorPlaceId));
+			}
+		});	
+	})
+</script>

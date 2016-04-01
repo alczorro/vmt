@@ -1,0 +1,152 @@
+/* column view container */
+.column-view-container {
+    background: #FFF;
+    display: block;
+    overflow-x: auto;
+    overflow-y: hidden;
+    height:400px;
+}
+
+/* the composition div for colums */
+.column-view-composition { 
+    display: table;
+    white-space: nowrap;
+}
+
+/**/
+.column {
+    display: table-cell;
+    border-right: 1px solid #eee;
+}
+
+.column:last-child {
+   /*  border-right: 0; */
+}
+
+.column:only-child {
+    border-right: 1px solid #eee;
+}
+
+/* for error messages */
+.column > p {
+    padding: 0 0 0 10px;
+    font-size: 15px;
+    color: #666;
+    width:220px;
+}
+
+/* for column listing */
+.column ul {
+    margin: 0;
+    width: 220px;
+    overflow-y: auto;
+    list-style: none;
+}
+
+.column ul li {
+    margin: 0;
+    padding: 8px 10px 0px 25px;
+    font-size: 15px;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0){
+	.column ul li {
+	    padding: 3px 10px 5px 25px;
+	}
+}
+
+.column ul li:hover {
+    cursor: pointer;
+}
+
+.column ul li i {
+    float: right;
+}
+
+.column ul li:hover,
+.column ul li.active {
+    background: #6699FF;
+    color: #fff;
+    font-weight:bold;
+}
+
+.column ul li:hover a, .column ul li.active a {
+    color: #FFFFFF;
+}
+
+/* icon type, could be replace with FontAwesome */
+.column [class^="icon-"],
+.column [class*=" icon-"] {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-top: 1px;
+    *margin-right: .3em;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-image: url("../img/glyphicons-halflings.png");
+    background-repeat: no-repeat;
+}
+.column li.active [class^="icon-"],
+.column li.active [class*=" icon-"],
+.column li:hover [class^="icon-"],
+.column li:hover [class*=" icon-"] {
+	background-image:url("../img/glyphicons-halflings-h.png");
+}
+
+.icon-chevron-right {
+    background-position: -456px -72px;
+}
+
+.icon-globe {
+    background-position: -336px -144px;
+}
+
+/*vera added on 2013.4.28*/
+
+.column ul li a.hcolumnLiSpan {display:inline-block; max-width:8em; overflow:hidden; margin-left:-3px; color:#666;display:inline-block;  margin-top:-2px;}
+.column ul li:hover a.hcolumnLiSpan,.column ul li.active a.hcolumnLiSpan {color:#fff;}
+.column ul li .icon-trash,
+	.column ul li .icon-edit,
+	.column ul li .icon-plus {
+	opacity:0;
+    filter:alpha(opacity=0);
+    -moz-opacity:0;
+}
+.span6.staff .column ul li:hover .icon-trash,
+	.span6.staff .column ul li:hover .icon-edit,
+	.span6.staff .column ul li:hover .icon-plus {
+	opacity:100;
+    filter:alpha(opacity=100);
+    -moz-opacity:100;
+}
+.column ul li .icon-user,.column ul li .icon-hdd {
+	float:left;
+	margin-left:-20px;
+}
+.column ul li .icon-trash {
+	float:right;
+	margin-right:5px;
+}
+.column ul li .icon-edit {
+	float:right;
+	margin-right:5px;
+}
+.column ul li .icon-plus {
+	float:right;
+	margin-right:0px;
+}
+
+@-moz-document url-prefix(){
+	/* .column [class^="icon-"],
+	.column [class*=" icon-"] {	
+		margin-top:-14px;
+	} 
+	
+	.column ul li .icon-trash {
+		margin-right:40px;
+	}
+	.column ul li .icon-edit {
+		margin-right:20px;
+	}*/
+	
+}

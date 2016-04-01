@@ -1,0 +1,169 @@
+<div id="{{id}}" class="modal hide fade" style="width:920px; left:40%"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3><span id="userOrDepart">移动成员</span><span class="subHint">请选择要移动到的目标部门</span></h3>
+	</div>
+	<div id="mt_subContent">
+		<div class="modal-body" style="padding:0">
+			<div class="sub-main row-fluid">
+				<div id="columns" class="span8" style="height:400px;border-right:1px solid #eee;">
+				<span style="display:none">当前没有可以移动的部门</span>
+				</div>
+				<div class="span4 staff-batch">
+					<div class="moveConfig" style="display:none">
+						<p>您现在可以</p>
+						<p><input name="sonOnly" checked="checked" type="radio" value="false"/>将部门：<span class="selectedDepart"></span></p>
+						<p class="ifEmpty"><input name="sonOnly" type="radio" value="true"/>将部门：<span class="selectedDepart"></span>的下级目录</p>
+						<!-- <p class="subTitle ifEmpty">下级目录列表</p> -->
+						<ul id="sonList"></ul>
+					</div>
+					<p class="toAim">移动到目标部门：<span id="selectedDepartment"></span></p>
+					
+					<p class="toAim" style="display:none" id="extendDestP">移动后，您所选择的成员/部门将会在组织中<span id="selectedDepartmentVisible">显示</span></p>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<span class="root" style="display:none;"><strong>位置：</strong><span id="moveToTitle"></span></span>
+		<button class="btn" data-dismiss="modal" aria-hidden="true" style="display:none" id="cancelMoveTo">取消</button>
+		<button class="btn btn-primary"  id="submitMove">确定</button>
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+	var activeItem=$(".sub-team li.active a.left-item");
+	var selectedItem=$(document).data("selected");
+	var selectedDepart=$(document).data("selectedDepart");
+	var moveDepart=selectedDepart!=null;
+	var $moveBtn=$("#submitMove");
+	var currentDN=activeItem.attr("dn");
+	$("#moveToTitle").html(activeItem.html());
+	$('#selectedDepartment').html(activeItem.html());
+	if(moveDepart){
+		$("#userOrDepart").html("移动部门");
+		$('.moveConfig,.root').show();
+		$('span.selectedDepart').html(selectedDepart.currentDisplay.replace(/,/gm,"&nbsp;/&nbsp;"));
+		$.post('search/dn/list',{dn:selectedDepart.dn}).done(function(data){
+			if(!data || !data.length){
+				$(".ifEmpty").hide();
+			}
+			$('#son-list-tmpl').tmpl(data).appendTo($('#sonList'));
+    	});
+	}else if(selectedItem.count==0){
+		$('#mt_subContent').html("<div class='popUpContent'><i class='icon-exclamation-sign'></i>请您至少选择一个部门或成员</div>");
+		$("#submitMove").attr("data-dismiss","modal");
+		return;
+	}
+	var dns=$.map(selectedItem.asArray(),function(item){
+		return encodeURIComponent(item.dn);
+	}).join(",");
+	$("#columns .hcolumnLi").die("click").live("click",function(){
+		var data=$(this).data('node-data');
+		$("#selectedDepartment").html(data.currentDisplay.replace(/,/gm,"&nbsp;/&nbsp;"));
+		if(moveDepart){
+			if(data.visible==selectedDepart.visible){
+				$('#extendDestP').hide();
+			}else{
+				$('#extendDestP').show();
+			}
+		}else{
+			$(selectedItem.asArray()).each(function(i,n){
+				if(data.visible!=n.visible){
+					$('#extendDestP').show();
+					return false;
+				}
+				$('#extendDestP').hide();
+			});
+		}
+		
+		$('#selectedDepartmentVisible').html(data.visible?'显示':'隐藏');
+		moveTodepart=data.dn;
+	});
+	
+	var moveTodepart=currentDN;
+	var rootIndex=0;
+	$('#moveToTitle').on('click',function(){
+		moveTodepart=currentDN;
+		$('#selectedDepartment').html($(activeItem).html());
+		$('#extendDestP').hide();
+	});
+	var isAjaxing=false;
+	var $columns=$("#columns");
+	new hColumns($columns,{
+		nodeSource:function(node_id,callback){
+			var data=$('#'+node_id).data('node-data');
+			var queryDN=(data==null)?activeItem.attr("dn"):data.dn;
+			if(isAjaxing){
+				return;
+			}
+			isAjaxing=true;
+			$.post('search/dn/list/depart',{dn:queryDN}).done(function(data){
+				isAjaxing=false;
+				if((data==null||data.length==0)&&rootIndex==0){
+					$('#mt_subContent').html("<div class='popUpContent'><i class='icon-exclamation-sign'></i>该组织并无部门</div>");
+					return;
+				}
+				$("#cancelMoveTo").show();
+				rootIndex++;
+				var list=$.map(data,function(item){
+	    			if(item.dn==(selectedDepart||1).dn){
+	    				return null;
+	    			}
+	    			return {id:"mv_"+item.oid,label:item.name,type:item.type,dn:item.dn,email:item.email,currentDisplay:item.currentDisplay,visible:item.visible};
+	    		});
+				var allNull=true;
+	    		callback(null,list);
+	    	});
+		},
+		labelText_maxLength:500,
+		noContentString:'没有下级部门'
+	});
+	$("#submitMove").on("click",function(){
+		if(!moveDepart){
+			$.post('move',{userDns:dns,destDn:moveTodepart}).done(function(data){
+				if(data){
+					$('#{{id}}').modal("hide");
+					window.location.reload();
+				}
+	    	});
+			$moveBtn.html("移动中...");
+			$moveBtn.attr("disabled","disabled");
+		}else{
+			var moveParam={destDn:moveTodepart,orgDn:selectedDepart.dn,sonOnly:$('input[name=sonOnly]:checked').val()};
+			$.post('depart/move/causeMerge',moveParam).done(function(data){
+				if(data!=null&&data.length>0){
+					var value='您欲移动部门已经有同名部门，此操作会导致部门合并，如果您不希望合并，请先改名。\n';
+					$(data).each(function(i,n){
+						value+=n.currentDisplay.replace(/,/gm," / ")+"\n";
+					})
+					var flag=confirm(value);
+					if(flag){
+						doDepartMove(moveParam);
+					}
+				}else{
+					doDepartMove(moveParam);
+				}
+	    	});
+			
+			
+		}
+	});
+	function doDepartMove(moveParam){
+		$.post('depart/move',moveParam).done(function(data){
+			if(data){
+				$('#{{id}}').modal("hide");
+				window.location.reload();
+			}
+    	});
+		
+		$moveBtn.html("移动中...");
+		$moveBtn.attr("disabled","disabled");
+	}
+	
+});
+</script>
+<script id="son-list-tmpl" type="text/x-jquery-tmpl">
+	<li>{{if $data.type=='folder'}}<i class="icon-hdd"></i>{{= name}}{{else}}<i class="icon-user"></i>{{= name}}{{/if}}</li>
+</script>

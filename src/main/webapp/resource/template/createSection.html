@@ -1,0 +1,123 @@
+<div id="{{id}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">新建部门</h3>
+	</div>
+	<form id="createDepartment">
+		<div class="modal-body">
+			<p>请输入部门名称：</p>
+			<input name="departName"  id="departName"  type="text" />
+			<span id="departName_error"></span>
+			<p>请输入部门代号：</p>
+			<input name="departSymbol" id="departSymbol" type="text" />
+			<span id="departSymbol_error" ></span>
+			<p class="hint noIndent">同一组织机构内唯一，提交后不可更改，不作为显示使用。</p>
+			<p>请输入部门权重：</p>
+			<input name="deptListRank" id="deptListRank" type="text" value="0" />
+			<span id="deptListRank_error" ></span>
+			<p class="hint noIndent">权重越高，排名越靠前。</p>
+			
+			<p>是否在组织中显示：</p>
+			<input name="deptVisible" id="visible" value="true" checked="checked" type="radio" />显示
+			<input name="deptVisible" id="unvisible" value= "false" type="radio" />隐藏
+			
+			<span id="visible_error" ></span>
+			<p class="hint noIndent"></p>
+		</div>
+		<div class="modal-footer">
+			<span class="root"><strong>位置：</strong><span id="cs_currentDN"></span></span>
+			<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+			<button type="submit" class="btn btn-primary" id="addDepart">确定</button>
+		</div>
+	</form> 
+</div>
+<script>
+	$(document).ready(function(){
+		var lastDepart=$(document).data("currentDN");
+		$.post('common/getDisplay',{dn:lastDepart}).done(function(data){
+			var activeNodeName=decodeURIComponent(data).replace(/,/gm,"&nbsp;/&nbsp;");
+			$('#cs_currentDN').html(activeNodeName);
+		});
+		$("#departName").on('blur',function(){
+			var destValue=$('#departSymbol').val();
+			if($.trim(destValue)==''){
+				var deptName=$(this).val();
+				$.post('jq/getPinyin',{'word':deptName}).done(function(data){
+					$('#departSymbol').val(data);
+				})
+			}
+		})
+		$('#departName,#departSymbol').enter(function(event){
+			$("#departName").blur();
+			$("#createDepartment").submit();
+		})
+		$("#createDepartment").validate({
+			submitHandler:function(form){
+				$.post("depart/create",{
+					name:$('#departName').val(),
+					symbol:$('#departSymbol').val(),
+					visible:$('input[name=deptVisible]:checked').val(),
+					pdn:lastDepart,
+					'listRank':$('#deptListRank').val()
+				}).done(function(data){
+					if(data){
+						$('#{{id}}').modal("hide");
+						var columns=$("#columnsFrame div.column");
+						if(columns.size()<2){
+							window.location.reload();
+							return
+						}
+						$("#columnsFrame .column:last ").prev().find("ul>li.active").click();
+					}else{
+						alert("创建失败，可能原因是部门已存在");
+					}
+				});
+			},
+			rules:{
+				departName:{
+					required:true,
+					remote:{
+						 type: "POST",
+						 url: 'jq/canDepartNameUse',
+						 data:{ 
+								 'dn':function(){return lastDepart}
+					  		}
+						 },
+					nodeIdOK:true
+				},
+				departSymbol:{
+						required:true,
+						remote:{
+							 type: "POST",
+							 url: 'jq/canDepartSymbolUse',
+							 data:{ 
+									 'pdn':function(){return lastDepart}
+						  		}
+							 },
+						specialLetter:true,
+						noZh:true
+					}
+					,
+					deptListRank:{
+						range:[0,2147483647],required:true,number:true,digits:true
+					}
+				
+			},
+			messages:{
+				departName:{required:'请输入部门名称',remote:'部门名称已被使用'},
+				departSymbol:{required:'请输入部门代号',remote:'部门代号已被使用'},
+				deptListRank:{ 
+					 required:"权重不允许为空",
+					 range:"权重超出允许范围",
+					 number:"权重必须为数字",
+					 digits:"只允许输入整数"}
+			},
+			errorPlacement: function(error, element){
+				var sub="_error";
+				var errorPlaceId="#"+$(element).attr("name")+sub;
+				$(errorPlaceId).html("");
+				error.appendTo($(errorPlaceId));
+			}
+		});	
+	})
+</script>

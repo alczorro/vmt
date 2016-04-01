@@ -1,0 +1,48 @@
+<div id="{{id}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">确定移除</h3>
+	</div>
+	<div class="modal-body">
+		<div id="subContent" class="popUpContent">
+		<p>确定移除以下人员？</p>
+		<ul id="memberId" class="operConfirm">
+		</ul>
+		<p class="warning">注意：此操作不可恢复</p>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true" id="cancelRemoveTeam">取消</button>
+		<button class="btn btn-primary" data-dismiss="modal"  id="unbindAll">确定</button>
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+	var selectedItem=$(document).data("selected");
+	if(selectedItem.count==0){
+		$('#subContent').html("<i class='icon-exclamation-sign'></i>请您至少选择一个人");
+		$('#cancelRemoveTeam').hide();
+	}else{
+		var dns=$.map(selectedItem.asArray(),function(item){
+			$('#memberId').append('<li><strong>'+(item.name||item.label)+"</strong>("+item.email+")\t"/* +item.currentDisplay.replace(/,/gm,"&nbsp;-&nbsp;") */);
+			return encodeURIComponent(item.dn);
+		}).join(",");
+		
+		$('#unbindAll').on("click",function(){
+			$.post("unbind",{'dns':dns})
+			.done(function(data){
+				if(data>0){
+					$('#{{id}}').modal("hide");
+					window.location.reload();
+					return;  
+				}else if(data==-1){
+					alert("请不要移除自己");
+				}
+		});
+		});
+	}
+});
+</script>
+<script>
+</script>

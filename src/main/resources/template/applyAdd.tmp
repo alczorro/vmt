@@ -1,0 +1,10 @@
+    <p>您好，用户${userName}[${email}]
+	<p>请求加入团队${teamName}
+    <p>接受请求链接
+	<p>您现在可以
+	<p>1)<a href="${baseUrl}/user/message">使用账号${loginName}登录系统</a>后，接受或者拒绝
+	<p>或者
+	<p>2)点击如下链接直接接受邀请
+    <p><a href="${activeUrl}">${activeUrl}</a>
+    <p>如果不接受，直接忽略即可
+    

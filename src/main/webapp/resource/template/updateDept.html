@@ -1,0 +1,131 @@
+<div id="{{id}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">编辑部门</h3>
+	</div>
+	<form id="updateDepartment">
+		<div class="modal-body form-horizontal">
+			<div class="control-group">
+	           <label class="control-label">请输入部门名称：</label>
+	           <div class="controls">
+	           		<input name="deptName"  id="deptName"  type="text" />
+					<input name="deptOrgName" id="deptOrgName" type="hidden"/>
+					<span id="deptName_error" class="error help-inline"></span>
+				</div>
+	     	</div>
+	     	<div class="control-group">
+	           <label class="control-label">请输入部门权重：</label>
+	           <div class="controls">
+	           		<input name="deptListRank" id="deptListRank" type="text" />
+					<span id="deptListRank_error"  class="error help-inline"></span>
+					<p class="hint noIndent">权重越高，排名越靠前。</p>
+				</div>
+	     	</div>
+			
+			<div class="control-group">
+				<label class="control-label">是否在组织中显示：</label>
+				<div class="controls">
+					<input name="deptUpdateVisible" id="visible" value="true" checked="checked" type="radio" />显示
+					<input name="deptUpdateVisible" id="unvisible" value="false" type="radio" />隐藏
+					<input name="orgVisible" id="orgVisible" value="" type="hidden"/>
+				</div>
+				<p class="hint noIndent"></p>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<span class="root"><strong>位置：</strong><span id="cs_currentDN"></span></span>
+			<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+			<button type="submit" class="btn btn-primary" id="updateDepart">确定</button>
+		</div>
+	</form>
+</div>
+<script>
+	$(document).ready(function(){
+		var lastDepart=decodeURIComponent($(document).data("currentDN"));
+		var dept;
+		$.post('depart/show',{destDn:lastDepart}).done(function(data){
+			var activeNodeName=decodeURIComponent(data.currentDisplay).replace(/,/gm,"&nbsp;/&nbsp;");
+			$('#cs_currentDN').html(activeNodeName);
+			$('#deptName').val(data.name);
+			$('#deptOrgName').val(data.name);
+			$('#deptListRank').val(data.listRank);
+			if(data.visible){
+				$('#visible').click();
+				$("#orgVisible").val(true);
+			}else{
+				$('#unvisible').click();
+				$("#orgVisible").val(false);
+			}
+		});
+		$('form input').enter(function(event){
+			$("#updateDepart").submit();
+		})
+		$('#updateDepartment').validate({
+			submitHandler:function(form){
+				var visible=$('input[name=deptUpdateVisible]:checked').val();
+				$.post('depart/update',{
+					'dn':lastDepart,
+					'name':$("#deptName").val(),
+					'orgName':$("#deptOrgName").val(),
+					'listRank':$('#deptListRank').val(),
+					'orgVisible':$("#orgVisible").val(),
+					'visible':visible
+				}).done(function (data){
+					if(data){
+						$('#{{id}}').modal("hide");
+						if($("#columnsFrame .column").length<=2){
+							window.location.reload();
+							return;
+						}
+						var cC=$("#columnsFrame .column:last ").prev();
+						var cLi=cC.find("ul>li.active");
+						var cLiId=cLi.attr('id');
+						var pLi=cC.prev().find("ul>li.active");
+						pLi.click();
+						setTimeout(function(){
+							$('#'+cLiId).click();
+						}, 300);
+						
+					}else{
+						alert("创建失败，可能原因是部门已存在");
+					}
+				})
+			},
+			rules:{
+				deptName:{
+					required:true,
+					nodeIdOK:true,
+					remote:{
+						 type: "POST",
+						 url: 'jq/canDepartNameUse',
+						 data:{ 
+							'departName':function(){return $("#deptName").val()},
+							'dn':function(){
+								return lastDepart;
+							}
+					  	}
+					},
+				},
+				deptListRank:{
+					range:[0,2147483647],required:true,number:true,digits:true
+				}
+				
+			},
+			messages:{
+				deptName:{required:'部门名称不允许为空',remote:'部门名称已被使用'},
+				deptListRank:{ 
+					 required:"权重不允许为空",
+					 range:"权重超出允许范围",
+					 number:"权重必须为数字",
+					 digits:"只允许输入整数"}
+			},
+			errorPlacement: function(error, element){
+				var sub="_error";
+				var errorPlaceId="#"+$(element).attr("name")+sub;
+				$(errorPlaceId).html("");
+				error.appendTo($(errorPlaceId));
+			}
+		});	
+		
+	})
+</script>

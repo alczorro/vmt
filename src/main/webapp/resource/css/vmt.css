@@ -1,0 +1,709 @@
+/*
+version:vmt 7.0
+author:zhangshixiang@cstnet.cn
+data:2013-04-17
+*/
+
+@charset "utf-8";
+
+h1,h2,h3 {font-family:Arial,"微软雅黑";}
+a {cursor:pointer;}
+body.vmt {background:url(../images/tile-lightGrey-slope.jpg) repeat #ebeded;}
+body.vmt .brand.vmt-logo {background:url(../images/vmt-logo-white.png) no-repeat; width:180px; height:30px;  padding:0; margin-top:-5px;}
+body.vmt .main {margin-top:70px; border:1px solid #ccc; box-shadow:2px 2px 2px #ccc; background:#fff; *padding-top:70px;}
+
+body.vmt .main .team-list{
+	border-right:1px solid #ccc; padding:0; background:url(../images/border.png) right 0 repeat-y #f9f9f9;
+	width:20%;
+}
+body.vmt .main .team-list p.title {font-weight:bold; margin:10px 15px 5px 10px;font-size:13px; }
+body.vmt .main .team-list p.title a {color:#666; }
+body.vmt .main .team-list .leftMenu {max-height:90%; overflow:auto; *position:relative;}
+body.vmt .main .team-list p.sub-title {font-weight:bold; color:#999; font-size:13px; margin:5px 5% 2% 10px;}
+body.vmt .main .team-list ul.sub-team {padding:0; margin:0px 5px 10px 1em ; list-style:none; }
+body.vmt .main .team-list ul.sub-team li {padding:5px 10px;*position:relative;}
+body.vmt .main .team-list ul.sub-team li.active {background:#08c;}
+body.vmt .main .team-list ul.sub-team li.active a {color:#fff;}
+body.vmt .main .team-list ul.sub-team li [class^="icon-"],
+	.mini [class^="icon-"], .mini [class*=" icon-"] {vertical-align:top;}
+body.vmt .main .team-list ul.sub-team li.active [class^="icon-"] {
+	background-image:url("../thirdparty/hColumns-master/img/glyphicons-halflings-h.png"); 
+}
+body.vmt .main .team-list ul.sub-team a {color:#333; cursor:pointer}
+body.vmt .main .team-list ul.sub-team a.left-item{ width:8em; display:inline-block;word-break:break-all;}
+body.vmt .main .team-list ul.sub-team a span.count {*position:absolute; *right:5px;}
+body.vmt .main .team-list .count {
+	background:#fff; float:right; border-radius:20px; padding:0 5px; font-size:9pt;
+	border:1px solid #ccc; color:#333;
+}
+body.vmt .main .team-list p.sub-title .count {color:#f7f7f7;cursor:pointer; font-size:12px;}
+body.vmt .main .team-list p.sub-title:hover .count {color:#08a}
+
+body.vmt .main .team-list .count.add {background:transparent; text-decoration:none; border:none; font-weight:normal;}
+
+body.vmt .main .staff {border-right:1px solid #ccc; margin-left:0; width:60%}
+body.vmt .main .staff #slider ul {margin:0}
+
+body.vmt .bookmark {
+	background:#f2f2f2; border-bottom:1px solid #ccc;padding:10px 3%; height:30px; margin-bottom:20px;
+	line-height:30px;}
+body.vmt .userDetail {
+	overflow-y:auto;
+	padding-top:20px;
+	margin-top:-20px; height:370px;
+}
+body.vmt #selected_item .bookmark,
+	body.vmt #seletedItemsDiv .bookmark {margin-bottom:0}
+body.vmt #selected_detail.staff-detail .bookmark h2, 
+	body.vmt #userDetailDiv.staff-detail .bookmark h2 {
+	margin:0; overflow:hidden;margin-top:-10px; height:24px; max-width:7em; word-break:break-all;
+}
+body.vmt #selected_detail.staff-detail .bookmark h2.editable,
+	body.vmt #userDetailDiv.staff-detail .bookmark h2.editable {margin-top:-6px;}
+body.vmt #userDetailDiv.staff-detail .bookmark i.icon-hdd,
+	body.vmt #selected_detail.staff-detail .bookmark i.icon-hdd,
+	body.vmt #userDetailDiv.staff-detail .bookmark i.icon-user,
+	body.vmt #selected_detail.staff-detail .bookmark i.icon-user,
+	body.vmt #userDetailDiv.staff-detail .bookmark i.icon-home,
+	body.vmt #selected_detail.staff-detail .bookmark i.icon-home,
+	body.vmt #userDetailDiv.staff-detail .bookmark i.icon-bullhorn,
+	body.vmt #selected_detail.staff-detail .bookmark i.icon-bullhorn {
+	filter:alpha(opacity=50); /*IE滤镜，透明度50%*/
+	-moz-opacity:0.5; /*Firefox私有，透明度50%*/
+	opacity:0.5;/*其他，透明度50%*/
+	margin-top:-5px;
+}
+body.vmt .bookmark.popup {height:20px; border-bottom:none;}
+body.vmt .bookmark.popup h3.popModal {}
+
+
+body.vmt .bookmark a.vmt-dialog {float:right; margin-top:1px;}
+body.vmt .bookmark ul > li > a.vmt-dialog,
+	body.vmt .bookmark ul > li > a {float:none; margin-top:auto; text-align:left}
+.dropdown.oper {float:right; font-size:13px;}
+.dropdown.oper .caret {margin-top:12px;}
+.dropdown.oper ul {left:-120px}
+
+body.vmt .span3.staff-detail,
+	body.vmt .span3.staff-batch {width:20%; margin-left:0%; }
+body.vmt .staff-detail h2,
+	body.vmt .staff-batch h3 {
+	padding:10px 1% 0 4%; font-size:18px; line-height:24px; margin-top:-7px;
+}
+body.vmt .staff-detail#selected_detail h2,
+	body.vmt .staff-detail#userDetailDiv h2 {display:inline-block; padding-left:2%;max-width:80%; }
+body.vmt .staff-detail#selected_detail i,
+	body.vmt .staff-detail#userDetailDiv i {margin-left:4%;}
+body.vmt .staff-detail .bookmark i.icon-ok.icon-white {
+	background-image:url("../thirdparty/hColumns-master/img/glyphicons-halflings-h.png");
+	filter:alpha(opacity=100); /*IE滤镜，透明度50%*/
+	-moz-opacity:1; /*Firefox私有，透明度50%*/
+	opacity:1;/*其他，透明度50%*/
+	margin-top:0;
+}
+body.vmt .staff-detail .bookmark i.icon-remove {
+	background-image:url("../thirdparty/hColumns-master/img/glyphicons-halflings-ori.png");
+	filter:alpha(opacity=100); /*IE滤镜，透明度50%*/
+	-moz-opacity:1; /*Firefox私有，透明度50%*/
+	opacity:1;/*其他，透明度50%*/
+	margin-top:0;
+}
+body.vmt .staff-detail h2.editable  {
+	padding:5px 1% 0px; border-bottom:1px dotted #ccc; margin-bottom:-15px;
+	cursor:pointer; word-break:break-all;
+}
+body.vmt .staff-detail hr {margin:5px 0px 20px}
+body.vmt .staff-batch h3.popModal {padding:0; /* margin:0; */ font-size:16px; word-break:break-all; max-width:90%}
+body.vmt .staff-detail h2 .btn-mini,
+body.vmt .staff-batch h3 span.staff-num,
+body.vmt .staff-batch h3 a{
+	font-weight:normal; float:right; margin:2px 0px 0 5px;
+}
+body.vmt .staff-batch h3 span.staff-num {
+	font-size:12px; margin-top:2px;
+}
+body.vmt ul.selected-staff {
+	list-style:none; padding:0; margin:0 auto; 
+	max-height:500px; overflow-y:auto; width:100%;
+}
+body.vmt ul.selected-staff li {
+	float:left; width:94%; padding:3px 2% 3px 4%; position:relative;
+	/* border:1px solid #ccc; box-shadow:1px 1px 1px #ddd;
+	padding:1% 2%; margin:1.57%; background:#f7f7f7; border-radius:5px; */
+	background:#fff;
+}
+body.vmt ul.selected-staff li.choosen {background:#ffe; border-radius:5px;}
+body.vmt ul.selected-staff li.even {background:#F0F3F9;}
+body.vmt ul.selected-staff li:hover,body.vmt ul.selected-staff li.even:hover {background:#69f}
+body.vmt ul.selected-staff li a {
+	position:absolute; right:10px; top:7px; font-size:13px; 
+	display:block; width:15px; height:15px; font-family:Arial;
+	cursor:pointer;  padding:0px 5px 1px 3px; line-height:15px; font-weight:bold;
+	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+body.vmt ul.selected-staff li span.cancle {display:none; color:#fff; float:right; margin:3px 30px 0 0; font-size:12px; cursor:pointer;}
+body.vmt ul.selected-staff li h4 {color:#666; font-size:13px; margin:0; line-height:14px;display: inline;}
+body.vmt ul.selected-staff li p {color:#999; word-break:break-all;font-size:12px; margin-bottom:0; line-height:13px;}
+
+@media screen and (-webkit-min-device-pixel-ratio:0){
+	body.vmt #userDetailDiv.staff-detail .bookmark i.icon-hdd,
+		body.vmt #selected_detail.staff-detail .bookmark i.icon-hdd,
+		body.vmt #userDetailDiv.staff-detail .bookmark i.icon-user,
+		body.vmt #selected_detail.staff-detail .bookmark i.icon-user,
+		body.vmt #userDetailDiv.staff-detail .bookmark i.icon-home,
+		body.vmt #selected_detail.staff-detail .bookmark i.icon-home,
+		body.vmt #userDetailDiv.staff-detail .bookmark i.icon-bullhorn,
+		body.vmt #selected_detail.staff-detail .bookmark i.icon-bullhorn {margin-top:-5px;}
+	body.vmt .bookmark .popover-content {padding-right:2em;}
+}
+
+
+body.vmt .main .oper-area {
+	/* background:#20364F; */background:#f7f7f7;
+	border-top:1px dotted #ddd;line-height:3em; width:100%;
+}
+body.vmt .main .oper-area > .span3 {margin-left:0;padding-left:1%; width:20%; *width:18%}
+body.vmt .main .oper-area > .span3.first{background:url("../images/border.png") repeat-y scroll right 0 #F7F7F7; border-right:1px solid #ccc;*width:19%;}
+body.vmt .main .oper-area > .span6 {width:60%;margin-left:0; padding-left:1%;*width:59%; border-right:1px solid #ccc; height:3em;}
+body.vmt .main .oper-area a.btn {margin-right:5px;margin-right:0\0; *margin-right:0;}
+
+/*no result*/
+.stafflist p.noTeam,p.leftNoTeam,.noTeam,.msg {
+	color:#ccc; font-size:2em; line-height:2em; padding:1em; text-align:center;
+	text-shadow:0px 1px 1px #eee;
+}
+p.leftNoTeam {font-size:12px; line-height:1em; padding:3px; text-align:left;}
+p.shint {color:#999; font-size:12px; margin:0}
+
+/*popup model dialog*/
+.modal-body p.hint {color:#999; text-indent:3.5em; font-size:13px;}
+.modal-body p.hint.sole {text-indent:2.2em;}
+.modal-body p.hint.noIndent {text-indent:0em; margin-top:0.5em;}
+.modal-body p.warning {color:#a00;font-size:13px; font-weight:bold;}
+.modal-body input[type="radio"] {margin:0 5px 5px 2em;}
+.modal-body .option {margin-right:2em; }
+#createTeamForm,#createDepartment {margin-bottom:0;}
+
+body.vmt .userView.btn {
+	width:5px; height:15px; background:url(../images/icon.png) -7px -3px no-repeat;
+	margin:3px 0 0 -4px;  border-radius:0 4px 4px 0;
+}
+body.vmt .userView.btn.list {border-radius:4px 0 0 4px; border-right:0; background-position:-52px -3px; margin-left:30px;}
+body.vmt .userView.btn.active {background-color:#fff;box-shadow:none;}
+
+body.vmt .search-staff {padding:10px 3%; }
+body.vmt .span6.staff .search-staff{background:#f2f2f2; border-bottom:1px solid #ccc}
+body.vmt .search-staff input[type="checkbox"].chooseAll {margin:0 5px 3px 15px;}
+body.vmt .search-staff.bottom label {display:inline-block; width:100px}
+body.vmt .search-staff.bottom a.batch {float:right;}
+body.vmt .search-staff input[type="text"] {width:70%;}
+body.vmt .search-staff .addAll {float:right; font-size:13px; margin-top:5px;}
+
+body.vmt .sub-main .source-choose {border-right:1px solid #eee; height:400px; padding:0 0 3% 0%}
+body.vmt .sub-main .source-choose ul.source-list {margin:0 0 5px 0; padding:0; width:100%; background:#f2f2f2; list-style:none; overflow:hidden;}
+body.vmt .sub-main .source-choose ul.source-list li {float:left; padding:10px 1em;}
+body.vmt .sub-main .source-choose ul.source-list li.active {background:url(../images/trigle.png) center bottom no-repeat;}
+body.vmt .sub-main .source-choose ul.source-list li a {color:#333;}
+body.vmt .sub-main .source-choose ul.source-list li.active a {font-weight:bold; color:#08a;}
+body.vmt .sub-main .staff {border:none;}
+#uploadFile-c {padding-left:2em; padding-top:10px;}
+#teamName_error,#teamSymbol_error,#departName_error,#departSymbol_error {color:#a00; display:inline-block; margin-left:5px;}
+p.result {font-size:13px; padding:10px 1em 5px; margin:0;}
+p.result span.title{font-weight:bold}
+p.result a.addAll {float:right;}
+.modal-footer .root {float:left; width:400px; text-align:left; word-break:break-all;}
+
+body.vmt #addMember .span8.source-choose {width:67%}
+body.vmt #addMember .span4.staff-batch {margin-left:0; width:33%}
+body.vmt #addMember .modal-footer .root,body.vmt #moveTo .modal-footer .root {width:750px;}
+body.vmt #addMember .staff-batch h3.popModal {padding:0 4%}
+
+.memberTitleAbc {
+	font-weight:bold; font-size:13px; color:#666; margin-top:0px; background:#f5f5f5;
+	border-bottom:1px solid #ccc;
+}
+ul.memberListAbc li ul li a span,.memberTitleAbc span{
+	display:inline-block; margin:0 2% 0 0; font-size:13px; overflow:hidden;
+	line-height:1.5em; height:1.5em; padding-top:2px; vertical-align:text-bottom;
+}
+ul.memberListAbc li ul li a span.name,.memberTitleAbc span.name {width:9%; padding-left:2%}
+ul.memberListAbc li ul li a span.mail,.memberTitleAbc span.mail {width:30.3%;}
+ul.memberListAbc li ul li a span.depart,.memberTitleAbc span.depart {width:13%;}
+ul.memberListAbc li ul li a span.status,.memberTitleAbc span.status {width:7%;}
+ul.memberListAbc li ul li a span.choice,.memberTitleAbc span.choice {width:15%}
+.memberTitleAbc span.choice .helpMe {width:20px; height:15px; background:url(../images/icon_help.png) 0 -35px no-repeat;display:inline-block; margin-left:5px;}
+ul.memberListAbc li ul li a span.choice .cancle {display:none; margin-left:5px;}
+ul.memberListAbc li ul li a span.choice i[class^="icon-"] {margin-top:-1px; margin-left:7px;}
+ul.memberListAbc li ul li a:hover span.choice i[class^="icon-"] {margin-top:-5px;}
+
+.helpMeContent {top:-100px; left:65%; z-index:9999999}
+.helpMeContent i.icon-remove {float:right}
+
+@media screen and (-webkit-min-device-pixel-ratio:0){
+	ul.memberListAbc li ul li a span.choice i[class^="icon-"] {margin-top:0px; margin-left:7px;}
+	ul.memberListAbc li ul li a:hover span.choice i[class^="icon-"] {margin-top:-4px;}
+}
+
+ul.operConfirm {margin:3%; overflow:auto;}
+ul.operConfirm#am_submit_result {max-height:400px;}
+ul.operConfirm li {margin-bottom:1em;}
+ul.operConfirm li strong {color:#0a0; margin:0 5px;}
+
+.popUpContent {margin:5%; line-eight:1.7em;}
+
+body.vmt #team-c select {width:80%;}
+.modal-header h3 span.teamName {
+	font-weight:normal; font-size:16px; color:#999;
+}
+
+/*setting*/
+.navbar.settingNav {margin-top:70px; margin-bottom:0; border:1px solid #ccc;}
+.navbar.settingNav .navbar-inner {border-radius:0; border:none}
+body.vmt .main.setting {margin-top:0px; border-top:0; box-shadow:none;}
+body.vmt .main.setting table {margin:5%; width:90%;}
+body.vmt .main.setting table td,body.vmt .main.setting table th {width:20em}
+body.vmt .main.setting table td.mini,
+body.vmt .main.setting table th.mini {width:20%}
+body.vmt .main.setting table td img,
+	body.vmt .main.setting table th img{width:50px; height:50px;}
+body.vmt .modal-body img {width:100px; height:100px;}
+body.vmt .main.setting table td.miniS,
+body.vmt .main.setting table th.miniS {width:10%}
+body.vmt .main.setting table th.miniL {width:30%}
+body.vmt .main.setting table td.mini.teamItem {padding-top:2px;}
+body.vmt .main.setting table td span.teamName {cursor:pointer;word-break:break-all;display:inline-block; max-width:130px;}
+body.vmt .main.setting table td span.uploadLogoSpan {display:inline-block; font-size:13px; margin:0 10px; text-align:center;}
+body.vmt .main.setting table td > a.icon-remove,
+body.vmt .main.setting table td ul li a.icon-remove {float:right; margin-left:10px;}
+body.vmt .main.setting table td input {margin:0 5px 2px 10px}
+body.vmt .main.setting table td input.autoCompleteSearch {width:290px; float:right;}
+body.vmt .main.setting table td ul.selected {margin:0; padding:0; width:300px;}
+body.vmt .main.setting table td ul.selected li {
+	float:left; padding:2px 5px; margin:0 1em 0.5em 0;
+	background:#eef; border:1px solid #eee; border-radius:4px;
+}
+body.vmt .main.setting table.setttingTable th {background:#f9f9f9;}
+
+/*message*/
+h3.messageTitle {padding:0.5em 5%; border-bottom:1px solid #ddd;}
+ul.messageList {margin:1em 5%; padding:0 0 2em 0; }
+ul.messageList li {padding:0.3em; list-style-type:circle; list-style-position:inside;}
+ul.messageList li .fromTeam {font-weight:bold; color:#888;}
+ul.messageList li a {border-bottom:1px dotted #08a;}
+ul.nav li a.sup {margin-top:0; padding-top:4px}
+ul.nav li a.sup .red {vertical-align:super;font-weight:bold; font-size:10px; color:#fff; background:#f90; border-radius:5px; padding:0 3px 0 2px;} 
+.sup {vertical-align:super;}
+
+/*vmtIndex*/
+body.vmt.login {background:url(../images/bg.png) #fff center 90px no-repeat;}
+body.vmt.login .main {background:none; border:none; box-shadow:none; height:440px; margin-top:90px;margin-bottom:20px;}
+.row-fluid [class*="span"].intro {min-height:400px;}
+
+.intro h2 {
+	margin: 60px 5% 10px 0; color:#333; font-size:40px; 
+	text-shadow:2px 2px 2px #fff; font-weight:300;
+}
+.intro p {color:#000; margin-top:35px; font-size:20px;}
+
+.regist {text-align:center; padding-top:120px;}
+.regist p {margin:40px 0 10px;}
+.regist a.btn {width:60%; font-family:Arial,"微软雅黑"}
+.regist a.btn#registVmt {margin-top:25px;}
+.regist .notHave {
+	margin: 30px 0 10px;
+	color: #ffffff;
+	overflow: hidden;
+	text-align: center;
+	display: block;
+	font-weight: bold;
+	width: 100%;
+}
+.regist .notHave:before,
+.regist .notHave:after {
+  background-color: #ffffff;
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+  vertical-align: middle;
+  width: 50%;
+}
+.regist .notHave:before {
+  right: 1em;
+  margin-left: -50%;
+}
+.regist .notHave:after {
+  left: 1em;
+  margin-right: -50%;
+}
+
+/*help*/
+.help {padding-top:20px;}
+.help h2.login-title {
+	font-family:Arial,"微软雅黑"; font-size:28px;
+	color:#333;
+	padding:10px 2% 10px; margin:0 5% 10px;
+	border-bottom:1px solid #eee;
+}
+.help h2.login-title.upgrade {border-bottom:none}
+.help-content{margin:20px 6% 5px;}
+.left-nav {width:20%; min-width:120px; max-width:200px; float:left; background:#f8f8f8; border:1px solid #eee; margin:0px 2% 30px 2%; font-size:15px; *position:static;}
+.left-nav ul.nav {margin:0; padding:0;list-style:none}
+.left-nav ul.nav li a {list-style:none; cursor:pointer;padding:0.8em 0 0.8em 10%; border-bottom:1px solid #eee;}
+.left-nav ul.nav li:last-child a {border:none;}
+.left-nav ul.nav li.active a {color:#fff; font-weight:bold; background:#08c;}
+.left-nav ul.nav li a {display:block;}
+
+.right-content {margin:0px 5% 30px 2%; width:65%; float:left; line-height:1.7em;min-height:400px}
+.right-content .commonQA > ol {font-weight:bold; list-style-type:decimal}
+.right-content .commonQA > ol > li {margin-bottom:20px;}
+.right-content .commonQA > ol > li > h4 {margin:0; font-family:Arial,"宋体"; font-size:15px;}
+.right-content .commonQA > ol > li > p {line-height:1.7em; margin:0.5em 0 0 0; font-weight:normal; text-align:justify; text-justify:inter-cluster;}
+.right-content .commonQA > ol > li > p.img {background:url(../images/help_commonQA.jpg) 0 0 no-repeat; width:552px; height:62px;}
+.right-content .commonQA > ol > li > ol {margin-top:0.5em;font-weight:normal; list-style-type:lower-latin;}
+.right-content .commonQA > ol > li > ol > li {margin-top:0.5em;}
+.right-content .changeLog p {font-weight:bold; margin:15px;}
+.right-content .changeLog p:first-child {margin-top:0;}
+.right-content .changeLog ul {list-style-type:circle;}
+.right-content .changeLog ul li {margin:0.5em 0;}
+.right-content .proIntro .img {background:url(../images/help_proIntro.jpg) 0 0 no-repeat; width:500px; height:377px; margin-left:200px; margin-bottom:30px;}
+.right-content .proIntro p { margin:15px;}
+.right-content .proIntro h4 {margin:15px; font-family:Arial,"宋体"; font-size:15px;}
+.right-content .proIntro p a:hover {text-decoration:underline;}
+
+.right-content .tendays h4 {font-size:15px; font-family:Arial,"宋体"; margin:2em 0 5px 0}
+.right-content .tendays > ol > li {margin-bottom:0.5em;}
+.right-content .tendays > ol > li > ol {list-style-type:lower-latin;}
+
+/*upgrade*/
+.help .upgrade {margin:0 7% 10px; padding-bottom:2em;}
+.help .upgrade .subHint {background:#f7f7ff; padding:1em; border:1px solid #eef}
+.help .upgrade .subHint p {margin:0; line-height:2em; font-size:16px;}
+.help .upgrade ul.org {margin:0 0 2em 0;}
+.help .upgrade ul.scheme {clear:both; overflow:hidden;}
+.help .upgrade ul.scheme li {width:30%; border:1px solid #ccc; float:left; margin:1%; padding:1em 0; }
+.help .upgrade ul.scheme li p {text-align:center; font-family:Arial,"微软雅黑"; font-size:20px; line-height:2em;}
+.help .upgrade ul.scheme li p.price {color:#a00;}
+/*right content*/
+.personal {
+	font-size:13px; color:#666; word-break:break-all; max-width:80%; margin-left:4%;
+}
+body.vmt #selected_detail.staff-detail .personal i, body.vmt #userDetailDiv.staff-detail .personal i,
+.personal i {
+	filter:alpha(opacity=15);
+	opacity:0.15; margin-left:-1%; display:inline-block;
+}
+
+/*sth changed from bootstrap*/
+.staff-detail.form-horizontal .setting {padding:5px 0; border-top:1px solid #ddd; margin:0 6%}
+.staff-detail.form-horizontal hr.update {margin:5px 5%; background:#ccc;}
+.staff-detail.form-horizontal p.update {text-align:center; margin:0}
+.staff-detail.form-horizontal p.update .btn-link.btn-small {font-size:11px}
+.staff-detail.form-horizontal .control-group {margin-bottom:5px; margin-left:6%; font-family:Arial,"微软雅黑"}
+.staff-detail.form-horizontal .control-group .control-label {
+	padding:0; width:100%; font-size:13px; color:#767e8b; 
+	cursor:text; text-align:left; margin-bottom:0;
+}
+.staff-detail.form-horizontal .control-group .controls {
+	margin-left:0em; max-width:90%; word-break:break-all;font-size:13px; color:#000;float:left;
+}
+p.remark{font-size: 10px;color: #999;clear: both;margin: 0;}
+
+/*app- 2014-4 hlj*/
+label a.management{display:none}
+label:hover a.management{display:inline-block;width:40px;float:right;padding-right:0px;}
+label:hover a.management :active{color:#555;}
+img.application1{ width:16px; height:16px; margin: 0px 0px 2px 2px;float:left;}
+.application-t{padding:0;width:170px;float:left;margin-bottom: 8px;margin-top: 2px;}
+span.application-tittle{display: block;color: #666;width: 110px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+a.application-edi{display: block;top: 4px;font-size: 10px;width: 30px;padding: 2px 5px 2px 0px;float:left;}
+
+/*add-app modal-2014-4-hlj*/
+.modal-search{padding:10px 0px 0px 0px;}
+.add-application{padding:0 2em;display: block;}
+.modal-app{padding:5px 0px;}
+.modal-app-t{cursor:pointer;padding: 4px 7px 0px 7px;width: 144px;height: 34px;
+					float: left;margin: 0px 9px 10px 0px;background: #f0f0f0;word-break:keep-all;
+					white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.modal-app-t.active{background: #fff;width: 147px;height: 30px;padding: 2px 2px 2px 5px;
+								box-shadow: rgba(0, 0, 0, 0.3) 0 1px 5px;border: 2px solid #ccc;}
+span.modal-app-tittle{display: block;color: #666;margin-left: 0px;position: relative;top: -25px;left: 35px;word-break:keep-all;
+					white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width: 120px;}
+.inbatch{width:42px;float:right;padding-right:0px;position: absolute;bottom: 10px;right: 40px;}
+
+/*#setting doc#*/
+
+#upload-qq-btn{width:50px;left: 95px;top: 5px;}
+
+
+
+
+#updateUserForm,#updateDepartment  {margin-bottom:0}
+#updateUserForm .form-horizontal .control-group,
+	#updateDepartment .form-horizontal .control-group {margin-bottom:8px;}
+#updateUserForm .form-horizontal .control-label,
+	#updateDepartment .form-horizontal .control-label {width:130px;}
+#updateUserForm .form-horizontal .control-label.nopadding {padding-top:0;}
+#updateUserForm .form-horizontal .controls,
+	#updateDepartment .form-horizontal .controls {margin-left:135px;}
+#updateUserForm .modal-body input[type="radio"] {margin-left:0}
+
+/*moveto*/
+#moveTo .modal-header h3 {cursor:pointer;}
+#moveTo .modal-header h3 span.subHint {color:#888; font-weight:normal;font-size:14px; margin-left:10px;}
+#moveTo .moveConfig {font-size:14px; color:#333; max-width:90%; padding-top:10px; margin-bottom:0; line-height:1.4em;}
+#moveTo .moveConfig input[type="radio"] {margin:0 3px 3px 1em}
+#moveTo .moveConfig .subTitle {font-size:13px; margin-left:3em;}
+#moveTo ul#sonList {margin:0 0 0px 2.5em; font-size:13px; max-height:200px; overflow:auto;}
+#moveTo ul#sonList i {filter:alpha(opacity=15);opacity:0.15; margin-right:5px;}
+
+#moveTo .toAim {margin-top:20px; line-height:1.4em; font-weight:bold;}
+#moveTo .toAim span, .error {color:#a00}
+span.success {color:#0a0}
+
+/*batchUpdate.jsp */
+div.cont{width:90%; height:350px; overflow:auto; margin:10px 5%}
+.addEmail {padding:0 2em}
+h3.batch {margin:30px 5% 10px; font-size:18px; border-bottom:1px solid #ccc;}
+h3.batch a.btn {float:right; margin-top:10px;}
+div.batch {margin:10px 5%}
+div.batch p.filter a span {display:inline-block; margin:3px 5px}
+table.batchTable {margin:10px 5%; width:90%}
+table.batchTable td,table.batchTable th {word-break:break-all}
+table.batchTable .check {width:20px;}
+table.batchTable .result {width:2em;}
+table.batchTable .email {width:10em;}
+table.batchTable .name {width:4em;}
+table.batchTable .org {width:6em;}
+table.batchTable .sex {width:2em;}
+table.batchTable .office {width:4em;}
+table.batchTable .tel {width:6em;}
+table.batchTable .phone {width:6em;}
+table.batchTable .title {width:5em;}
+table.batchTable .weight {width:2em;}
+table.batchTable .visible {width:4em;}
+i.icon-batchAdd,
+	i.icon-batchError,
+	i.icon-batchUpdate,
+	i.icon-batchNo {background:url(../images/icon-batch.png) 0 0 no-repeat; display:inline-block; width:20px; height:20px;}
+i.icon-batchError {background-position:0 -120px;}
+i.icon-batchUpdate {background-position:0 -80px;}
+i.icon-batchNo {background-position:0 -40px;}
+.taskItem.icon-batchOk {background:url(../images/icon-batch.png) right -162px no-repeat; width:100%}
+
+div.batch p.filter a i.icon-batchAdd,
+	div.batch p.filter a i.icon-batchError,
+	div.batch p.filter a i.icon-batchUpdate{margin-top:-3px;}
+
+/*searchGroup*/
+.searchGroup {padding:5%}
+ul.searchResult {margin:10px 0;}
+ul.searchResult li {margin:7px 0}
+
+/*sth merged bootstrap and hcolumns*/
+[class^="icon-"], [class*=" icon-"] {
+	background-image:url("../thirdparty/hColumns-master/img/glyphicons-halflings.png")
+}
+.hcolumn [class^="icon-"],.hcolumn [class*=" icon-"] {
+	margin-top:-14px; 
+}
+ul#groupList [class^="icon-"].icon-bullhorn, ul#groupList [class*=" icon-"].icon-bullhorn {
+	float:left; margin-top:3px; margin-right:5px;
+}
+
+/*sth changed from bootstrap-editable*/
+.editable-container.popover {z-index:99999999;}
+.column .editableform .control-group > div {font-size:13px; font-weight:normal;}
+.column .editableform .control-group > div > .editable-input {}
+.column .editableform .editable-buttons {margin-left:-1px;}
+.column .editableform .editable-buttons .editable-cancel{
+	margin-left:-1px; padding-left:2px; padding-right:0px; border-radius:0;
+}
+.column .editableform input[type="text"].input-medium {
+	border-radius:0; width:130px; box-shadow:none; border:none; height:22px; padding:0 3px;
+	margin-top:-3px;
+}
+.column .editable-buttons {height:30px}
+.column .editable-buttons [class^="icon-"] {margin-top:-2px; padding:3px 3px}
+.column .btn.editable-submit {padding-left:4px; padding-right:1px; border-radius:0;}
+.column li.active [class^="icon-remove"],
+.column li.active [class*=" icon-remove"],
+.column li:hover [class^="icon-remove"],
+.column li:hover [class*=" icon-remove"]{
+	background-image:url("../thirdparty/hColumns-master/img/glyphicons-halflings.png")
+}
+.column li.active [class^="icon-ok"],
+.column li.active [class*=" icon-ok"],
+.column li:hover [class^="icon-ok"],
+.column li:hover [class*=" icon-ok"]{
+	background-image:url("../thirdparty/hColumns-master/img/glyphicons-halflings.png")
+}
+.column input[type="text"].input-medium {
+	height:12px; font-size:12px; 
+}
+.column .editable-buttons .btn {
+	height:22px; background:#fff; box-shadow:none; margin-top:-2px; border:none;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0){
+	.column .editableform .control-group > div {height:20px; font-size:13px; font-weight:normal;}
+	.column .editableform .control-group > div > .editable-input {margin-top:-1px;}
+	.column .editableform input[type="text"].input-medium {margin-top:0;}
+}
+
+/*for IE8 and IE7 not responsive*/
+body.vmt .main .team-list,.staff {height:450px}
+.main .staff-batch,.staff-detail,.main #columns,#slider.slider,.main .selected-staff {
+	height:325px;
+}
+#slider .slider-content,.stafflist {height:100%}
+#slider .slider-nav {height:102%}
+.column ul {height:435px;}
+	
+/*responsive design*/
+@media (min-height: 600px) {
+	body.vmt .main .team-list,.staff {height:580px}
+	.main .staff-batch,.staff-detail,.main #columns,#slider.slider,.main .selected-staff {
+		height:500px;
+	}
+	body.vmt .userDetail {height:500px;}
+	#slider .slider-content,.stafflist {height:100%}
+	#slider .slider-nav {height:500px}
+	.column ul {height:530px}
+	.modal-body .column ul {height:395px;}
+	.column-view-container {height:530px;}
+	#search_result {max-height:495px; overflow:auto;}
+}
+
+@media (max-height: 599px) {
+	body.vmt .main .team-list,.staff {height:450px}
+	.main .staff-batch,.staff-detail,.main #columns,#slider.slider,.main .selected-staff {
+		height:325px;
+	}
+	body.vmt .userDetail {height:375px;}
+	#slider .slider-content,.stafflist {height:100%}
+	#slider .slider-nav {height:101%}
+	.column ul {height:395px}
+	.column-view-container {height:398px;}
+	#search_result {max-height:375px; overflow:auto;}
+}
+@media (min-width:1280px) {
+	.column ul {width: 230px;}
+}
+@media (max-width:1279px) {
+	.column ul {width: 220px;}
+}
+@media (max-width:1200px) {
+	body.vmt .container, 
+	body.vmt .navbar-static-top .container, 
+	body.vmt .navbar-fixed-top .container, 
+	body.vmt .navbar-fixed-bottom .container {
+	width:1000px;
+	}
+	body.vmt .main .team-list ul.sub-team a.left-item {width:6em;}
+}
+i.hideNode{
+	filter:alapha(opacity=40);
+	opacity:0.4;
+	-moz-opacity:0.4
+}
+
+/* profile doc*/
+
+#profile-con-app-img{width:64px;height:64px;margin: 0px 0px 4px 0px;}
+.profile-app-img{width:69%;float:left;height:500px;overflow: scroll;padding:10px;}
+.profile-app-introduce{width:24%;float:left;height:480px;padding:20px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.profile-app-introduce #profileContent p {line-height:2;}
+.profile-app-introduce #profileContent #content label {display: inline;}
+.profile-app-introduce #profileContent #content input{margin: 0px 3px 2px 6px;} 
+
+/**send_cms*/
+
+
+/*--SMS style-2014 6 4--*/
+#ipList tr td ul.left-ul {margin-left:0px;}
+#ipList tr td ul.left-ul li{padding-left:20px;}
+#ipList tr td ul.left-ul li a.left-item {width: 8em;display: inline-block;word-break: break-all;color: #333;cursor: pointer;line-height: 28px;}
+#ipList tr td ul.left-ul li.active{background:#08c;text-decoration: none;color:#fff;}
+#ipList tr td ul.left-ul li.active a{color:#fff;}
+
+		/*----send SMS style*/
+#addrecipient{width:9em;padding:15px 0px;}
+a#addMember{margin-left:17px;}
+ul#finalPeopleSelectedUl{margin: 15px 0px 15px 0px;border-top:1px solid #ddd;}
+ul#finalPeopleSelectedUl li span.licontainName{display: block;width: 190px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+ul#finalPeopleSelectedUl li.finalReciver{padding:5px 10px 5px 15px;word-break:break-all;
+										min-height:22px;vertical-align: middle;border-bottom:1px solid #ddd;}
+ul#finalPeopleSelectedUl li.finalReciver:hover{background:#69f;color:#fff;}
+ul#finalPeopleSelectedUl li.finalReciver span.close {opacity: 1;padding: 0;cursor: pointer;background: transparent;
+										border: 0;-webkit-appearance: none;color:#aaa;margin-top: -20px;}
+ul#finalPeopleSelectedUl li.finalReciver:hover span.close{color:#fff;}
+#sendSmsForm{padding: 8px 10px 10px 10px;}
+#smsContent{width:95%;margin-top:15px;}
+
+		/*----log SMS style*/
+td#smssendedsended{padding:0px;width: 4em;width: 28%;}
+ul#smsDetail {margin:0px;margin-top: 50px;width:300px;}
+ul#smsDetail a.AccordingTosmsContent{padding:15px 17px;}
+ul#smsDetail li.sendedSms span{margin:10px 0px 5px 10px;color: #888;font-size: 80%;line-height: 10px;}
+ul#smsDetail li.sendedSms{border-top:1px solid #ddd;cursor: pointer;padding:0px;width:300px;}
+ul#smsDetail li:hover{background:#fff;}
+ul#smsDetail li.active{background:#fff;color:#555;}
+#SmsSendedContent{background:#f0f0f0;padding:10px;color: #555;margin: 10px 0px;word-break: break-all;}
+ul#smsDetail li div.SendedSmscontent{width:278px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; 
+		overflow: hidden; background:#fff;border: 1px dotted #fff;padding: 10px;}
+ul#smsDetail li:hover div.SendedSmscontent,ul#smsDetail li:focus div.SendedSmscontent
+		{background:#f0f0f0;border-color:#69f;padding: 10px;}
+ul#smsDetail li:hover.sendedSms span,ul#smsDetail li:focus.sendedSms span{color:#005580;}
+ul#smsDetail li.active span{color:#69f;}
+ul#smsDetail li.active div.SendedSmscontent{background:#f0f0f0;border-color: #fff;}
+
+span#theSmsSender{color: #888;font-size: 80%;line-height: 10px;}
+#resendSmsAll{float:right;}
+#smsDetail{height:450px;overflow:auto;overflow-x:hidden;}
+table#recipientslist{border-top:1px solid #ddd;border-right:1px solid #ddd;}
+table#recipientslist tr{border-bottom:1px solid #ddd;}
+.error{color:#D50505;}
+.success{color:#0A9B67;}
+.waited{color:#69f;}
+
+.re-emailFiles{margin-left: 65px;margin-top: -19px;}
+.re-emailFiles li{list-style:square;}
+		/*----manage sms style*/
+.linewire{border-bottom:1px solid #ddd;width:825px;clear:both;padding-left:10px;}
+#addMember{margin-bottom:9px;}
+li.textmessagesender{width:248px;height:45px;float: left;border: 1px solid #ddd;margin-right: 25px;margin-bottom: 10px;
+	margin-left: -15px;padding: 5PX;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis;overflow: hidden;}
+li.textmessagesender p{clear:both;width:50px;line-height:30px;}
+li.textmessagesender a{float:right;margin-top: -35px;}
+li.textmessagesender.inlinestyle{width: 152px;margin-right:10px;margin-left:0px;padding: 5PX;white-space: nowrap;
+		text-overflow: ellipsis;-o-text-overflow: ellipsis;overflow: hidden;}
+li.textmessagesender.inlinestyle a{width:150px;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis;overflow: hidden;}
+.fontbold{font-weight: bold;margin-top:15px;}
+.linetitlestyle{display:block;padding:5px;border-bottom:1px solid #ddd;margin-bottom:10px;}
+.linetitlestyle span{font-size:16px;}
+.linetitlestyle a{float:right}
+#logDetailTd >ul#memberList{margin-left:0px;}
+#logDetailTd >div>ul#memberList{margin-left:0px;}
+ul.littleeftmarginul{margin-left:25px;}
+ul.littleeftmarginul>li{width:227px;}
+ul.littleeftmarginul>li>a{font-size:12px;}
+ul.littleeftmarginul>li>.application-tittle{width:190px;}
+        /*---email send style*/
+.attFile{margin-left: 22px;position: relative;top: -20px;}
+
+
+		/*----gm_smsManage style*/
+#addSmsGroupForm,#rechargeForm{margin:0px;}
+#smsManageaccount{width:130px;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis;overflow: hidden;}
+#smsManagenumber{width:180px;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis;overflow: hidden;}
+
+/*nav-sms-style*/
+.nav>li>div.dropdown>a {display: block;}
+.navbar .nav>li>div.dropdown>a {float: none;padding: 10px 15px 10px;color: #777;text-decoration: none;text-shadow: 0 1px 0 #fff;}
+.nav>li>div.dropdown>a {color: #999;text-shadow: 0 -1px 0 rgba(0,0,0,0.25);}
+.navbar-inverse .nav>li>div.dropdown>a {color: #999;text-shadow: 0 -1px 0 rgba(0,0,0,0.25);}
+.navbar-inverse .nav>li>div.dropdown>a:hover{color:#fff;}
+.navbar-inverse .nav>li.active>div.dropdown>a{color:#fff;}
+
+body.vmt .main.setting table#ipfilter-c {border: none;border-top:1px soid #ddd;margin-bottom: 0px;}
+

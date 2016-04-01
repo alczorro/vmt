@@ -1,0 +1,202 @@
+<style>
+	#batchUpdateUserForm,#updateDepartment  {margin-bottom:0}
+#batchUpdateUserForm .form-horizontal .control-group,
+	#batchUpdateUserForm .form-horizontal .control-group {margin-bottom:8px;}
+#batchUpdateUserForm .form-horizontal .control-label,
+	#batchUpdateUserForm .form-horizontal .control-label {width:130px;}
+#batchUpdateUserForm .form-horizontal .control-label.nopadding {padding-top:0;}
+#batchUpdateUserForm .form-horizontal .controls,
+	#batchUpdateUserForm .form-horizontal .controls {margin-left:135px;}
+#batchUpdateUserForm .modal-body input[type="radio"] {margin-left:0}
+	
+	#batchUpdateUserForm input[type=checkbox] {margin:5px}
+	#batchUpdateUserForm .form-horizontal .control-group .control-label {width:auto; text-align:left}
+	#batchUpdateUserForm .form-horizontal .control-group .controls {margin-left:auto;}
+</style>
+<div id="{{id}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<form id="batchUpdateUserForm">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">批量编辑<span style="color:gray; font-size:12px; margin-left:12px; font-weight:normal;" id="titleHint"></span></h3>
+		</div>
+		<div id="mt_subContent">
+			<div class="modal-body form-horizontal">
+				<div class="control-group">
+		           <label class="control-label nopadding">
+		           	<input class="needUpdate" data-for="sex" data-type="radio" type="checkbox"/>
+		           	性别：</label>
+		           <div class="controls">
+		           		<input name="sex" id="sexMale" value="male" checked="checked" type="radio" />男
+						<input name="sex" id="sexFemale" value="female" type="radio" />女
+						<span id="visible_error" class="error help-inline" ></span>
+					</div>
+		     	</div>
+		     	<div class="control-group">
+		           <label class="control-label">
+		           <input class="needUpdate"  data-for="office"  type="checkbox"/>办公室：</label>
+		           <div class="controls">
+		           		<input name="office"  id="office"  type="text" />
+						<span id="office_error" class="error help-inline" ></span>
+					</div>
+		     	</div>
+				<div class="control-group">
+		           <label class="control-label"><input data-for="title" class="needUpdate" type="checkbox"/>职称/职务：</label>
+		           <div class="controls">
+		           		<input name="title"  id="title"  type="text" />
+						<span id="title_error" class="error help-inline"></span>
+					</div>
+		     	</div>
+		     	<div class="control-group">
+		           <label class="control-label nopadding"><input data-for="visible" data-type="radio" class="needUpdate" type="checkbox"/>是否在<span id="isGroup">组织</span>中显示：</label>
+		           <div class="controls">
+		           		<input name="visible" id="visible" value="true" checked="checked" type="radio" />是
+						<input name="visible" id="unvisible" value="false" type="radio" />否
+						<span id="visible_error"  class="error help-inline"></span>
+					</div>
+				</div>
+				<div class="control-group">
+		           <label class="control-label"><input data-for="listRank" class="needUpdate" type="checkbox"/>权重：</label>
+		           <div class="controls">
+		           		<input name="listRank" id="listRank" value="0"  type="text" />
+						<span id="listRank_error"  class="error help-inline"></span>
+					</div>
+		     	</div>
+		     	<div class="control-group">
+		           <label class="control-label nopadding"><input data-for="disableDchat" data-type="radio" class="needUpdate" type="checkbox"/>是否禁用科信：</label>
+		           <div class="controls">
+		           		<input name="disableDchat" value="true" type="radio" />是
+						<input name="disableDchat" value="false" type="radio" />否
+						<span id="disableDchat_error"  class="error help-inline"></span>
+					</div>
+		     	</div>
+				<div class="control-group">
+		           <label class="control-label"><input data-for="custom1" class="needUpdate" type="checkbox"/>自定义1：</label>
+		           <div class="controls">
+		           		<input name="custom1" maxlength=100 id="custom1" type="text" />
+						<span id="custom1_error"  class="error help-inline"></span>
+					</div>
+		     	</div>
+		     	<div class="control-group">
+		           <label class="control-label"><input  data-for="custom2" class="needUpdate" type="checkbox"/>自定义2：</label>
+		           <div class="controls">
+		           		<input name="custom2" maxlength=100 id="custom2" type="text" />
+						<span id="custom1_error"  class="error help-inline"></span>
+					</div>
+		     	</div>
+		     	<div id="coreMailDiv" style="display:none">
+		     		<p class="shint">以下选项仅对邮箱账号适用：</p>
+			     	<div class="control-group" >
+			           <label class="control-label nopadding"><input data-for="accountStatus" data-type="radio" class="needUpdate" type="checkbox"/>邮箱账号状态：</label>
+			           <div class="controls">
+			           	<input type="radio" id="accountStatus_normal" name="accountStatus" value="normal"/> 正常
+			           	<input type="radio" id="accountStatus_locked" name="accountStatus" value="locked"/>锁定
+			           	<input type="radio" id="accountStatus_stop" name="accountStatus" value="stop"/>停用
+						</div>
+			     	</div>
+					<div class="control-group">
+			           <label class="control-label"><input data-for="expireTime" class="needUpdate" type="checkbox"/>过期时间：</label>
+			           <div class="controls">
+			           		<input  type="text" name="expireTime" id="expireTime" maxlength="10" />
+							<span id="expireTime_error" ></span>  
+						</div>
+			     	</div>
+		     	</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+			<button type="submit" class="btn btn-primary" id="updateUser">确定</button>
+		</div>
+	</form>
+</div>
+<script>
+	$(document).ready(function(){
+		$("#expireTime").jQdatepicker({ picker: "<img class='picker' style='width:16px;height:16px' align='middle' src='"+vmt.context+"/resource/thirdparty/datepicker/sample-css/cal.gif' alt=''>",applyrule:function(){return true;}});
+		var selectedItem=$(document).data("selected");
+		var selectedDepart=$(document).data("selectedDepart");
+		if(selectedItem.count==0||selectedDepart!=null){ 
+			$('#mt_subContent').html("<div class='popUpContent'><i class='icon-exclamation-sign'></i>请您至少选择一个成员</div>");
+			return;
+		}
+		var userDns=[];
+		$.each(selectedItem.asArray(),function (i,n){
+			userDns.push(encodeURIComponent(n.dn));
+		})
+		$.post(vmt.context+"/user/batchUpdateUserValidate",{
+			userDns:userDns,
+			dn:vmt.currTeam.dn
+		}).done(function(result){
+			$('#titleHint').html("已选择"+result.data.allCount+"个成员,其中"+result.data.coreMailCount+"个为邮箱账号");
+			if(result.data.coreMailCount>0){
+				$('#coreMailDiv').show();
+			}
+		});
+		
+		$('#batchUpdateUserForm').validate({
+			submitHandler:function(){
+				var param={dn:vmt.currTeam.dn,userDns:userDns,needUpdate:[]};
+				if($('.needUpdate:checked').size()==0){
+					alert("请选择要更新的字段");
+					return ;
+				}
+				$('.needUpdate').each(function(i,n){
+					var data=$(n).data();
+					var pName=data['for'];
+					var pValue=null;
+					if($(n).is(':checked')){
+						if(data.type=='radio'){
+							pValue=$('input[name='+pName+']:checked').val();
+						}else{
+							pValue=$('input[name='+pName+']').val();
+						}
+						param.needUpdate.push(pName);
+					}
+					if($.trim(pValue)!=''){
+						param[pName]=pValue;
+					}
+				});
+				$.post(vmt.context+'/user/batchUpdateSubmit',param).done(function(data){
+					window.location.reload();
+				});
+			},
+			rules:{
+				userName:{
+					required:true,
+				},
+				listRank:{
+					range:[0,2147483647],required:true,number:true,digits:true
+				},
+				expireTime:{
+					isYYYYMMDD:true,
+					doMySelf:{
+						call:function(value){
+							if(value){
+								return getTodayStr()<value;
+							}
+							return true;
+						}
+					}
+				}
+				
+			},
+			messages:{
+				userName:{required:'用户姓名不允许为空'},
+				listRank:{ 
+					 required:"权重不允许为空",
+					 range:"权重超出允许范围",
+					 number:"权重必须为数字",
+					 digits:"只允许输入整数"}
+				,expireTime:{
+					doMySelf:'日期不能早于当天'
+				}
+			},
+			ignore:":not(:visible)",
+			errorPlacement: function(error, element){
+				var sub="_error";
+				var errorPlaceId="#"+$(element).attr("name")+sub;
+				$(errorPlaceId).html("");
+				error.appendTo($(errorPlaceId));
+			}
+		});
+	});
+</script>

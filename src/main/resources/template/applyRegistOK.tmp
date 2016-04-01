@@ -1,0 +1,2 @@
+	<p>您好,您申请的电子邮件:&nbsp;${email}&nbsp;已审核通过
+	<p>请将本邮件转发给管理员:&nbsp;${adminEmail}&nbsp;索取密码

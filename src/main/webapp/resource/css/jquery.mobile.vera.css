@@ -1,0 +1,77 @@
+/*
+version:vmt mobile 7.1
+author:zhangshixiang@cstnet.cn
+data:2013-07-31
+*/
+
+body.vmt {background:url(../images/tile-lightGrey-slope.jpg) repeat #ebeded;}
+body.vmt .brand.vmt-logo {background:url(../images/vmt-logo-white.png) no-repeat; width:170px; height:30px;  padding:0; margin-top:-5px;}
+body.vmt .main {margin-top:70px; border:1px solid #ccc; box-shadow:2px 2px 2px #ccc; background:#fff; *padding-top:70px;}
+
+
+body.vmt .listView h2.ui-li-heading {line-height:20px; margin:1px }
+body.vmt .container.mobile.index {padding-top:70px; padding-bottom:20px;}
+body.vmt ul.ui-listview.indexList  {margin-top:40px;}
+body.vmt .container.mobile.detail {padding-top:20px; padding-bottom:20px;}
+body.vmt .container.mobile.userDetail { 
+	border:1px solid #ccc; border-radius:0.6em; padding:0.7em 15px; margin-top:20px;
+	background:linear-gradient(#FFFFFF, #F1F1F1) repeat scroll 0 0 #EEEEEE; box-shadow:0 1px 3px rgba(0, 0, 0, 0.2);
+}
+body.vmt .ui-listview {margin:0 10px;}
+
+body.vmt span.mobileHint {color:#999; font-size:12px; margin-left:1em; font-weight:normal}
+body.vmt p.mobileHint.sole {color:#999; font-size:12px; clear:both; } 
+
+.create label.title,
+	.create label.radio {clear:both; width:100%}
+.create span.error.help-inline {color:#a00; font-size:12px; margin-top:-25px; padding-left:0}
+/*sth merged bootstrap and hcolumns*/
+[class^="icon-"], [class*=" icon-"] {
+	background-image:url("../thirdparty/hColumns-master/img/glyphicons-halflings.png")
+}
+.hcolumn [class^="icon-"],.hcolumn [class*=" icon-"] {
+	margin-top:-14px; 
+}
+ul#groupList [class^="icon-"].icon-bullhorn, ul#groupList [class*=" icon-"].icon-bullhorn {
+	float:left; margin-top:3px; margin-right:5px;
+}
+
+/*sth changes form jquery.mobile*/
+.ui-body-c .ui-link:visited {color:#999}
+.ui-body-c .ui-link {font-weight:normal}
+.userContainer div[data-role="fieldcontain"] {overflow:hidden;}
+.userContainer label {float:left;}
+.userContainer label.title {color:#767E8B; font-weight:bold;}
+.ui-header > .ui-btn, .ui-footer > .ui-btn {text-decoration:none;}
+.ui-header .ui-btn-icon-left .ui-btn-inner, .ui-footer .ui-btn-icon-left .ui-btn-inner, .ui-mini.ui-btn-icon-left .ui-btn-inner, .ui-mini .ui-btn-icon-left .ui-btn-inner {
+	max-width:5em; text-align:left;
+}
+.ui-header .ui-title, .ui-footer .ui-title {margin:0 auto; max-width:10em;}
+/*responsive design*/
+@media (max-width: 979px) {
+	body.vmt .container.mobile.index{padding-top:0; }
+	.ui-listview {margin:0 20px;}
+	.nav-collapse,
+	  .nav-collapse.collapse {overflow: visible;}
+	.nav-collapse {clear: none;}
+	.nav-collapse .nav {float:left; margin:0 0 0 10px;}
+	.navbar-inverse .nav-collapse .nav > li > a:hover,
+  	.navbar-inverse .nav-collapse .nav > li > a:focus,
+  	.navbar-inverse .nav-collapse .dropdown-menu a:hover,
+  	.navbar-inverse .nav-collapse .dropdown-menu a:focus {
+    	background-color: transparent;
+  	}
+  	.navbar .nav-collapse .nav.pull-right {float:right; font-weight:normal; margin-right:10px;}
+  	.userContainer {margin:0;}
+  	body.vmt .container.mobile.index .ui-listview-filter {margin:0 20px;}
+  	body.vmt ul.ui-listview.indexList  {margin-top:20px;}
+  	.navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {margin-right:0}
+}
+
+@media (max-width: 768px) {
+	body.vmt .container.mobile.userDetail {margin:20px 10px;}
+}
+@media (max-width: 420px){
+	body.vmt p.mobileHint,
+		body.vmt p.mobileHint.sole {clear:both; margin-left:0em}
+}

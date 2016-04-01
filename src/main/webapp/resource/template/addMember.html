@@ -1,0 +1,767 @@
+<div id="{{id}}" class="modal hide fade" style="width:920px; left:40%" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div id="am_sub">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="myModalLabel">添加成员</h3>
+		</div>
+		<div class="modal-body" style="padding:0;">
+			<div class="sub-main">
+				<div class="row-fluid">
+					<div class="span8 source-choose">
+						<ul class="source-list">
+							<li class="active" id="org"><a href="#">我的组织内成员</a></li>
+							<li id="team"><a href="#">我的团队</a></li>
+							<li id="uploadFile"><a href="#">上传文件</a></li>
+							<li id="manual"><a href="#">手工添加</a></li>
+						</ul>
+						<div id="org-c">
+						  	<div class="form-search search-staff">
+					  			<input type="text" id="searchUserKeyword" placeholder="按邮箱，姓名搜索">
+					  			<a class="btn btn-primary" id="searchButton">搜索</a>
+					  		</div>
+					  		<div id=searchResultView>
+						  		<p class="result search" style="display:none"><span class="title">搜索结果(<span id="searchCount">0</span>)</span><a href="#" id="am_addAll" class="addAll">添加所有</a></p>
+						  		<ul id="searchResult" unscelctable="on" onselectstart="javascript:return false;" class="selected-staff" style="max-height:250px; overflow:auto;-moz-user-select:none;">
+									
+								</ul>
+							</div>
+						</div>
+						<div id="team-c" style="display:none">
+							<form class="form-search search-staff" style="margin-bottom:0px;">
+								<select id="am_select_1" style="width:50%">
+								</select>
+								<input style="width:45%;" type="text" id="searchMemberBox" class="autoCompleteSearch" name="keyword" placeholder="请输入关键词搜索">
+							</form>
+							<div id="am_result_view1">
+								<p class="result team"><span class="title">成员列表</span>
+								(
+								<span id="breadCatch" ></span>
+								)
+								<a href="#" id="am1_addAll" class="addAll">添加所有</a></p>
+								
+								
+								<ul id="am_select_result_1" unscelctable="on" onselectstart="javascript:return false;" class="selected-staff" style="max-height:250px; overflow:auto;-moz-user-select:none;" >
+								</ul>
+							</div>
+						</div>
+						<div id="uploadFile-c" style="display:none">
+							<div id="fileUploader" class="d-large-btn maintain">
+								<div class="qq-uploader">
+									<div class="qq-upload-button">
+										<input type="file" multiple="multiple" name="files" style="cursor:pointer;">
+									</div>
+									<ul class="qq-upload-list fileList"></ul>
+								</div>
+							</div>
+							文件格式范例：<a href="../resource/download/格式.xls" target="_blank">格式.xls</a>
+							<div id="amFileResultView" style="display:none">
+								<p class="result analyze"><span class="title">解析结果</span><a href="#" id="am2_addAll" class="addAll">添加所有</a></p>
+								<ul id="am_file_result_2" unscelctable="on" onselectstart="javascript:return false;" class="selected-staff" style="max-height:250px; overflow:auto;-moz-user-select:none;" >
+								</ul>
+							</div>
+						</div>
+						<div id="manual-c" style="display:none">
+							<div class="form-search search-staff">
+					  			<input type="text" id="manualSearchUser" name="keyword" placeholder="请直接输入待添加成员邮件地址，或输入成员姓名搜索">
+					  			<p class="hint noIndent">输入完成后回车确认</p>
+					  		</div>
+						</div>
+					</div>
+					<div class="span4 staff-batch">
+						<div id="selectedPeople" style="display:none">
+							<div class="bookmark popup">
+								<h3 class="popModal">
+									已选成员
+									<a class="btn btn-mini" id="am_removeAllSelected" >全部移除</a> 
+									<span class="staff-num"><span id="am_selected_count">0</span>个成员</span>
+								</h3>
+							</div>
+							<ul id="am_selected" class="selected-staff"  style="height:335px; overflow:auto;">
+								
+							</ul>
+						</div>
+						<div id="hasNoSelectedPeople">
+							<p class="msg">您还没有添加成员</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<ul style="display:none" id="am_submit_result" class="operConfirm">
+	</ul>
+	<div class="modal-footer">
+		<span class="root"><strong>位置：</strong><span id="currentDN"></span></span>
+		<button class="btn" data-dismiss="modal" aria-hidden="true" id="cancelAddMember">取消</button>
+		<button class="btn btn-primary"  id='submitAll'>确定</button>
+	</div>
+</div>
+<script src="../resource/thirdparty/fileuploader/fileuploader.js" type="text/javascript"></script>
+<script>
+$(document).ready(function(){
+	 selectedPeople=new Map();
+	var tabCacheMap=new Map();
+	function updateCount(){
+		$("#am_selected_count").html(selectedPeople.count);
+	}
+	
+	var searchConfig={
+	 		getChoiceClass:function(){
+	 			if(selectedPeople.isExists("am_"+this.data.oid)){
+	 				return "icon-ok";
+	 			}else if(this.data.status!=null&&this.data.status!='OK'){
+	 				return "icon-warning-sign";
+	 			}
+	 			return "icon-plus";
+	 		},
+		getTab2ChoiceClass:function(){
+			if(selectedPeople.isExists("am_"+this.data.oid)){
+				return "icon-ok";
+			}
+			return "icon-plus";
+		},getChoiceLiClass:function(){
+				if(selectedPeople.isExists("am_"+this.data.oid)){
+	 				return "choice";
+	 			}
+	 			return "";
+			}
+	 	}
+	function redrawBreadCatchByData(currentDisplay,inDn){
+		var display=currentDisplay.split(",");
+		var dn=new DN(decodeURIComponent(inDn));
+		var breads=[];
+		function startTo(split,index){
+			var result='';
+			for(var i=0;i<index;i++){
+				result+=split[i]+",";
+			}
+			return result.substr(0,result.length-1);
+		}
+		$.each(display,function(i,n){
+			breads.push({'dn':dn.dept(i+2),'name':display[i],'currentDisplay':startTo(display,i+1)});
+		}); 
+		$('#breadCatch').html($('#bread-catch-tmpl').tmpl(breads));
+	}
+	//init activeItem name
+	var activeNodeKey=$(document).data("currentDN");
+	$.post('common/getDisplay',{dn:activeNodeKey}).done(function(data){
+		var activeNodeName=decodeURIComponent(data).replace(/,/gm,"&nbsp;/&nbsp;");
+		$('#currentDN').html(activeNodeName);
+	});
+	//init select
+	$("#am_select_1").on("change",function(){
+		var select=$(this).attr("value");
+		$('#searchMemberBox').val('');
+		redrawBreadCatchByData($(this).find(":selected").html(),select);
+		var cacheData=tabCacheMap.get(select);
+		if(cacheData!=null){
+			renderTab2(cacheData);
+			return;
+		}
+		$.ajax({
+			 url:"search/dn/list",
+			 async:false,
+			 type:'post',
+			 data:{
+				 q:'',
+				 dn:select,
+				 from:'addMember'
+			 },
+			 success:function(data){
+				if(data==null||data.length==0){
+					$('#am_result_view1').hide();
+					return;
+				} 
+				tabCacheMap.put(decodeURIComponent(select),data);
+				renderTab2(data);
+			 }
+		});
+	})
+	for(var key in scopeDic.data){
+		if(key==activeNodeKey){
+			continue;
+		}
+		$("#am_select_1").append('<option  value="'+key+'">'+scopeDic.get(key)+'</option>');
+	}
+	$("#am_select_1").change();
+	function getKeyConfigFromSelector(selector){
+		return {
+			'selector':selector,
+			isSelected:function(li){
+				return $(li).find("i").attr("class")=="icon-ok";
+			},
+			addClass:function(li){
+				var $icon=$(li).find("i");
+				var tmplData=$(li).data('tmplItem').data;
+				if($icon.attr('class')=='icon-warning-sign'){
+					return;
+				}else{
+					$icon.attr("class","icon-ok");
+					var item={
+						email:tmplData.cstnetId,
+						truename:tmplData.truename,
+						oid:tmplData.oid
+					}
+					if(!selectedPeople.isExistsAttrEquals('email',item.email)){
+						selectedPeople.put("am_"+item.oid,item);
+					}
+				}
+			},
+			removeClass:function(li){
+				$(li).find("i").attr("class","icon-plus");
+				selectedPeople.remove($(li).attr("id"));
+			},
+			getCount:function(){
+				return selectedPeople.count;
+			},
+			complete:function(){
+				redrawSelect();
+			},
+			multiable:true
+		}
+	}
+	//multi select
+	//var keyControl1=new KeyMultiPress(getKeyConfigFromSelector("#searchResult li.am_search_result"));
+	//var keyControl2=new KeyMultiPress(getKeyConfigFromSelector("#am_select_result_1 li.am_search_result"));
+	//var keyControl2=new KeyMultiPress(getKeyConfigFromSelector("#am_file_result_2 li.am_search_result"));
+	//bind click 
+	$(".am_search_result").die('click').live('click',function(){
+		var $icon=$(this).find("i");
+		var tmplData=$(this).data('tmplItem').data;
+		if($icon.attr('class')=='icon-warning-sign'){
+			$icon.parent().next("span.cancle").css({"display":"none"});
+			return;
+		}else{
+			$icon.attr("class","icon-ok");
+			$icon.parent().next("span.cancle").css({"display":"inline"});
+			var item={
+				email:tmplData.cstnetId,
+				truename:tmplData.truename,
+				oid:tmplData.oid
+			}
+			selectedPeople.put("am_"+item.oid,item);
+			redrawSelect();
+		}
+	});
+	$(".am_search_result span.cancle:visible").die('click').live('click',function(event){
+		var $icon=$(this).parent().find("i");
+		var tmplData=$(this).parent().data('tmplItem').data;
+		$icon.attr("class","icon-plus");
+		$icon.parent().next("span.cancle").css({"display":"none"});
+		selectedPeople.remove("am_"+tmplData.oid);
+		redrawSelect();
+		event.stopPropagation();
+	});
+	//
+	function redrawSelect(){
+		if(selectedPeople.count==0){
+			$('#hasNoSelectedPeople').show();
+			$('#selectedPeople').hide();
+		}else{
+			$('#hasNoSelectedPeople').hide();
+			$('#selectedPeople').show();
+		}
+		var $dest=$("#am_selected");
+		$dest.html("");
+		$('#am-selected-template').tmpl(selectedPeople.asArray()).appendTo($dest);
+		$dest.children("li:even").addClass("even");
+		updateCount();
+	}
+	
+	//点击source-list显示对应的div
+	$("ul.source-list li").live("click",function(){
+		var name = $(this).attr("id");
+		var divName = name + "-c";
+		$(this).parent().parent("div.source-choose").children("div").hide();
+		$('#' + name + '-c').show();
+		$("ul.source-list li.active").removeClass("active");
+		$(this).addClass("active");
+	})
+	$("#am_addAll").on('click',function(){
+		selectedPeople.removeAll();
+		$("#searchResult>li.am_search_result").each(function(i,n){
+			putTmplDataToSelect(n);
+		});
+		redrawSelect();
+	});
+	$('#am1_addAll').on('click',function(){
+		var $lastBread=$('#breadCatch a:last');
+		var allDN=$lastBread.data('dn');
+		if($('#searchMemberBox').val()!=''){
+			$('li.searchResult.link').each(function(i,n){
+				var item=$(n).data('tmplItem').data;
+				 selectedPeople.put("am_"+item.oid,item);
+			});
+		}else{
+			addPeopleRegular(allDN);
+		}
+		redrawSelect();
+		$("li.searchResult").each(function(i,n){
+			if(!$(n).hasClass("choice")&&!$(n).hasClass("folder")){
+				$(n).addClass("choice").find("i.icon-plus").attr("class","icon-ok");
+			}
+		});
+	});
+	$('#am2_addAll').on('click',function(){
+		$("#am_file_result_2>li.am_search_result").each(function(i,n){
+			putTmplDataToSelect(n);
+		});
+		redrawSelect();
+	});
+	function putTmplDataToSelect(li){
+		var tmplData=$(li).data('tmplItem').data;
+		var $i=$(li).find("i");
+		if($i.attr("class")=='icon-warning-sign'){
+			return;
+		}
+		var item={
+				email:tmplData.cstnetId,
+				truename:tmplData.truename,
+				oid:tmplData.oid
+		}
+		if(!selectedPeople.isExistsAttrEquals('email',item.email)){
+			selectedPeople.put("am_"+item.oid,item);
+		}
+		$i.attr("class","icon-ok");
+	}
+	
+	$("#am_removeAllSelected").on("click",function(){
+		selectedPeople.removeAll();
+		$("li.am_search_result").each(function(i,n){
+			$(n).find("i").attr("class","icon-plus");
+		});
+		$("li.searchResult.choice").each(function(i,n){
+			$(n).removeClass("choice");
+			$(n).find("i.icon-ok").attr("class","icon-plus");
+		});
+		redrawSelect();
+		
+	});
+	$("#am_selected .icon-remove").die('click').live('click',function(){
+		var $dest=$(this).parent().parent();
+		var oid=$dest.attr("oid");
+		
+		selectedPeople.remove(oid);
+		selectedPeople.remove("am_"+oid);
+		$("li.am_search_result[id=am_"+oid+']').find("i").attr("class","icon-plus");
+		$("li.searchResult.choice[id=am_"+oid+"]").removeClass("choice").find("i.icon-ok").attr("class","icon-plus");
+		redrawSelect();
+	})
+	
+	$('#searchButton').on('click',function(){
+		var keyword=$.trim($('#searchUserKeyword').val());
+		if(keyword==''||keyword==null){
+			return;
+		}
+		$.ajax({
+			 url:"{{baseUrl}}/user/search/coreMail",
+			 type:'post',
+			 data:{'q':keyword,limit:100,needLocal:false},
+			 success:function(data){
+				var $dest=$("#searchResult");
+				$dest.html("");
+				$("#searchCount").html(data.length);
+				if(data==null||data.length==0){
+					$("#searchResultView").hide();
+					return;
+				}
+				$("#searchResultView").show();
+				$('#am-search-result-template').tmpl(data,searchConfig).appendTo($dest);
+				$dest.children("li:even").addClass("even");
+			 	$("p.result.search").show();
+			 }
+		})
+	});
+	$('#searchUserKeyword').enter(function(event){
+		$('#searchButton').click();
+	})
+	//file uploader
+		new qq.FileUploader({
+			element : document.getElementById('fileUploader'),
+			action : 'file/upload/xls',
+			sizeLimit : 1024 * 1024,
+			allowedExtensions:['xls', 'csv','xlsx'],
+			onComplete : function(id, fileName, data) {
+				if(data.success){
+					var $dest=$('#am_file_result_2');
+					$dest.html("");
+					$('#am-search-result-template').tmpl(data.result,searchConfig).appendTo($dest);
+					$dest.children("li:even").addClass("even");
+					$("#amFileResultView").show();
+				}else{
+					
+					switch(data.errorMsg){
+					case 'can_not_read':{
+						alert('文件格式有误，无法读取');
+						break;
+					}
+					case 'colums_count_not_match':{
+						alert('列数目有误，无法读取');
+						break;
+					}
+						
+					}
+					$("#amFileResultView").hide();
+				}
+			},
+			messages:{
+	        	typeError:"请上传xls,xlsx,或者csv格式的文件",
+	        	emptyError : "请不要上传空文件",
+	        	sizeError:"大小超过1M限制"
+	        },
+	        showMessage: function(message){
+	        	$("#amFileResultView").hide();
+	        	if(message=='colums_count_not_match'){
+	        		alert('列数目不匹配，读取失败');
+	        	}else{
+	        		alert(message);
+	        	}
+	        },
+	        onProgress: function(id, fileName, loaded, total){
+	        	//$('#uploadText').html("<fmt:message key='configPhoto.uploadFile'/>("+Math.round((loaded/total)*100)+"%)");
+	        },
+	        multiple:false
+		});
+	//autocomplete 自动搜索提示
+	$('input#manualSearchUser').autocomplete('../user/search/auto',
+            {
+		  width:382,
+		  matchSubset:false,
+		parse:function(data){
+			return $.map(data, function(item) {
+				return {
+					data : item,
+					result : item.cstnetId,
+					value:item.truename
+				}
+			});
+		},
+	formatItem:function(row, i, max) {
+    return  row.truename + "\" [" + row.cstnetId+"]";
+ },
+ formatMatch:function(row, i, max) {
+    return row.truename + " " + row.cstnetId;
+ },
+formatResult: function(row) {
+    return row.truename;
+ }
+});
+$("input#manualSearchUser").result(function(event, data, formatted){
+	$(this).data('selected',data);
+	passToRight.apply(this);
+});
+$("input#manualSearchUser").enter(function(event){
+	passToRight.apply(this);
+})
+function passToRight(){
+	var data=$(this).data('selected');
+	var item;
+	//new data
+	if(data==null){
+		var value=$(this).val();
+		if(!Util.isEmail(value)){
+			$(this).data('selected',null);
+			return;
+		}
+		item={
+				email:value,
+				truename:Util.getEmailName(value),
+				oid:value.replace(".",'').replace("@",'')
+		}
+	}
+	//old data
+	else{
+		item={
+				email:data.cstnetId,
+				truename:data.truename,
+				oid:data.cstnetId.replace(".",'').replace("@",'')
+		};
+	}
+	$(this).val("");
+	$(this).data('selected',null);
+	if(!selectedPeople.isExistsAttrEquals('email',item.email)){
+		selectedPeople.put("am_"+item.oid,item);
+	}
+	redrawSelect();
+}
+
+var over=false;
+$('#submitAll').on("click",function(){
+		if(selectedPeople.count==0){
+			$("#{{id}}").modal("hide");
+			return;
+		}
+		if(over){
+			$('#{{id}}').modal("hide");
+			var columns=$("#columnsFrame div.column");
+			//click parent torefresh
+			if(columns.size()<2){
+				window.location.reload();
+				return
+			}
+			$("#columnsFrame .column:last ").prev().find("ul>li.active").click();
+			return;
+		}
+		var users=$.map(selectedPeople.data,function(item){
+				function replaceEn(str){
+					if(str==null){
+						return "";
+					}else{
+						return str.replace(/,/g, "\，"); 
+					}
+				}
+				if(item!=null){
+					return replaceEn(item.email)+"!~!"+replaceEn(item.truename);
+				}
+		});
+		$.post('add',{dn:activeNodeKey,peoples:users.join(",")})
+				.done(function(data){
+					$('#cancelAddMember').hide();
+					over=true;
+				 	$('#am_sub').toggle();
+				 	$('#am_submit_result').toggle();
+				 	var successArray=[];
+				 	var failArray=[];
+				 	$(users).each(function(i,n){
+				 		if(!data[i]){
+				 			failArray.push(n.split("!~!")[0]);
+				 		}else{
+				 			successArray.push(n.split("!~!")[0]);
+				 		}
+				 	});
+				 	var $count=$(".sub-team li.active span.count");
+				 	$count.html(parseInt($count.html())+successArray.length);
+				 	
+				 	$('#am-submit-success-result').tmpl(successArray).appendTo("#am_submit_result");
+				 	$('#am-submit-fail-result').tmpl(failArray).appendTo("#am_submit_result");
+		 });
+		
+		
+});
+//默认按域名搜索
+$.get(vmt.context+'/user/jq/iamDomainAdmin').done(function(flag){
+	if(flag){
+		$('#searchUserKeyword').val($(document).data('domain'));
+		$('#searchButton').click();
+		$('#searchUserKeyword').val('')
+	}else{
+		$('#org').hide();
+		$('#org-c').hide();
+		$('#team').addClass('active')
+		$('#team-c').show();
+	}
+});
+//取消选择
+$('.cancleSelect').die('click').live('click',function(){
+	var $li=$(this).closest('li');
+	$li.removeClass('choice').find("i.icon-ok").attr("class","icon-plus");
+	selectedPeople.remove("am_"+$li.data('tmplItem').data.oid);
+	redrawSelect();
+});
+
+//离开的时候把searchItem对象销毁
+$('#{{id}}').on('hide',function(){
+	selectedPeople.removeAll();
+	$(".am_search_result").die('click');
+});
+function renderTab2(data){
+	var $dest= $("#am_select_result_1");
+	if(data==null||data.length==0){
+		$dest.html("");
+		return;
+	}
+	$('#am_result_view1').show();
+	$dest.html("");
+	$('#am-list-search-result-template').tmpl(data,searchConfig).appendTo($dest);
+	$dest.children("li:even").addClass("even");
+}
+var departPeopleCache=new Map();
+//部门迭代加人
+function addPeopleRegular(dn){
+	var data=departPeopleCache.get(dn);
+	if(data!=null){
+		$.each(data,function(index,item){
+			item.email=item.cstnetId;
+			selectedPeople.put("am_"+item.oid,item);
+		});
+		redrawSelect();
+	}else{
+		$.post(vmt.context+'/user/search/local',{scope:dn,from:'addMember',keyword:''}).done(function(result){
+			departPeopleCache.put(dn,result);
+			$.each(result,function(index,item){
+				item.email=item.cstnetId;
+				item.truename=item.truename?item.truename:item.name;
+				selectedPeople.put("am_"+item.oid,item);
+			});
+			redrawSelect();
+		});
+	}
+}
+//点击加部门
+$('#am_select_result_1 li.searchResult i.icon-plus').die('click').live('click',function(e){
+	var $li=$(this).closest('li');
+	var data=$li.data('tmplItem').data; 
+	if($li.hasClass('folder')){
+		addPeopleRegular(data.dn);
+	}else{
+		checkLi($li);
+		data.truename=data.name;
+		selectedPeople.put("am_"+data.oid,data);
+		redrawSelect();
+	}
+	e.stopPropagation();
+});
+function checkLi($li){
+	$li.addClass('choice');
+	$li.find('i.icon-plus').attr('class','icon-ok')
+}
+
+//第二个Tab li 点击事件
+$('#am_select_result_1 li.searchResult').die('click').live('click',function(){
+	if($(this).hasClass('folder')){
+		var tmplItem=$(this).data('tmplItem').data;
+		redrawBreadCatchByData(tmplItem.currentDisplay,tmplItem.dn);
+		var cacheData=tabCacheMap.get(tmplItem.dn);
+		if(cacheData!=null){
+			renderTab2(cacheData);
+			return;
+		}
+		$.post(vmt.context+"/user/search/dn/list",{dn:tmplItem.dn}).done(function(data){
+			
+			tabCacheMap.put(tmplItem.dn,data);
+			renderTab2(data);
+		}); 
+	}else{
+		
+	}
+	
+	});
+	//面包屑逻辑
+	$('.breadCatchShit').live('click',function(){
+		var data=$(this).data();
+		var cacheData=tabCacheMap.get(data.dn);
+		renderTab2(cacheData);
+		redrawBreadCatchByData(data.currentDisplay,data.dn);
+	});
+	//搜搜框tab2
+	$('#searchMemberBox').keyup(function(e){
+		if($.trim($(this).val())==''){
+			var $lastBread=$('#breadCatch a:last'); 
+			$lastBread.click();
+		}
+	}).enter(function(event){
+		var dn=decodeURIComponent($('#am_select_1').val());
+		$.post(vmt.context+'/user/search/local',{scope:dn,keyword:$.trim($(this).val())}).done(function(result){
+			$.each(result,function(i,n){
+				n.name=n.truename?n.truename:n.name;
+				n.truename=n.truename?n.truename:n.name;
+				n.email=n.cstnetId;
+				n.type='link';
+			});
+			renderTab2(result);
+			 //smsUIControl.renderSearchItem(result);
+		});
+	});
+	
+});
+
+
+</script>
+	<script id="bread-catch-tmpl" type="text/x-jquery-tmpl">
+		/<a data-dn={{= dn }} data-current-display="{{= currentDisplay }}" class="breadCatchShit">{{= name}}</a>
+	</script>   
+<script id="am-submit-success-result" type="text/x-jquery-tmpl">
+	<li>邮箱为<strong>{{= $data}}</strong>的成员添加成功！</li>
+</script>
+<script id="am-submit-fail-result" type="text/x-jquery-tmpl">
+	<li>邮箱为<strong>{{= $data}}</strong>的用户无法添加成功</li>
+</script>
+<script id="am-search-result-template" type="text/x-jquery-tmpl">
+<li id="am_{{= oid}}" class="am_search_result">
+	<a class="closeMe"><i class="{{= $item.getChoiceClass()}}"></i></a>
+	<span class="cancle">取消选择</span>
+	<h4>{{= truename}}</h4>
+	<p>{{= cstnetId}}</p>
+</li>
+</script>
+<script id="am-selected-template" type="text/x-jquery-tmpl">
+<li oid="{{= oid}}" class="">
+	<a class="closeMe"><i class="icon-remove"></i></a>
+	<h4>{{= truename}}</h4>
+	<p>{{= email}}</p>
+</li>
+</script>
+<script id="am-list-search-result-template" type="text/x-jquery-tmpl">
+		{{if $data.type=='folder'}}
+			<li id="am_{{= oid}}" class="searchResult folder">
+				<i class="icon-hdd"></i>
+				<h4>{{= name}}</h4>
+				<i  class="icon-chevron-right"></i>
+				<i  class="{{if $item.isSelected($data)}}icon-ok{{else}}icon-plus{{/if}}"></i>
+				<span class="cancleSelect">取消选择</span> 
+			</li> 	
+		{{else}}
+			<li id="am_{{= oid}}" class="searchResult link {{= $item.getChoiceLiClass()}}">
+				<i class="icon-user"></i> 
+				<h4>{{= name}}</h4> <span style="color:#999">- {{= email }}{{if $data.mobile!=null }} - {{= mobile}}{{/if}}</span>
+				<i  class="{{= $item.getTab2ChoiceClass() }}"></i>
+				<span class="cancleSelect">取消选择</span> 
+			</li> 
+		{{/if}} 
+		
+	</script>
+
+<script>
+	$("ul li.am_search_result").die("mouseenter").live("mouseenter",function(){
+		if($(this).children("a.closeMe").children("i").attr("class") == "icon-ok"){
+			$(this).children("span.cancle").css({"display":"inline"});
+		}
+	});
+	$("ul li.am_search_result").die("mouseleave").live("mouseleave",function(){
+		$(this).children("span.cancle").css({"display":"none"});
+	});
+</script>
+		<style>
+		li.searchResult h4{
+			display:inline
+		}
+		#am_select_result_1 i.icon-plus{
+			display:none
+		}
+		#am_select_result_1 li.searchResult:hover i.icon-plus{
+			display:block
+		}
+		li.searchResult i.icon-plus{
+			float:right;
+		}
+		li.searchResult.link i.icon-plus{
+			margin-right:25px
+		}
+		li.searchResult i.icon-chevron-right{
+			float:right;
+		}
+		li.searchResult i.icon-ok{
+			float:right;
+		}
+		li.searchResult.link i.icon-ok{
+			margin-right:25px
+		}
+		
+		li i{
+			cursor: pointer; 
+			margin-right:5px;
+		}
+		li.searchResult.choice  span.cancleSelect{
+			float:right;
+			color:white;
+			cursor:pointer; 
+			margin-right:5px;
+		} 
+		li.searchResult.choice:hover span.cancleSelect{
+			display: inline; 
+		} 
+		li.searchResult  span.cancleSelect{
+			display:none;
+		}
+		
+	</style>
