@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>net.duckling</groupId>
+  <artifactId>vmt-api</artifactId>
+  <version>7.2</version>
+
+  <dependencies>
+    <dependency>
+      <groupId>net.duckling</groupId>
+      <artifactId>falcon-common</artifactId>
+      <version>0.4.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>net.duckling</groupId>
+      <artifactId>umt-api</artifactId>
+      <version>5.4</version>
+    </dependency>
+    <dependency>
+      <groupId>net.duckling</groupId>
+      <artifactId>frmwork</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>net.duckling</groupId>
+      <artifactId>cloudy-utils</artifactId>
+      <version>1.1.5</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-compiler-plugin</artifactId>
+	<version>2.3.2</version>
+	<configuration>
+	  <encoding>UTF-8</encoding>
+	  <source>1.7</source>
+	  <target>1.7</target>
+	</configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
