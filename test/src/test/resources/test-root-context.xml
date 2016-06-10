@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-3.0.xsd
+			http://www.springframework.org/schema/tx      
+    		http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<context:property-placeholder location="classpath:conf/vmt.properties"/>
+		<bean id="ldapContextSource"
+	        class="org.springframework.ldap.core.support.LdapContextSource">
+	    <property name="url" value="ldap://10.10.2.9:389" />
+	    <property name="base" value="dc=vmt7" />
+	    <property name="userDn" value="cn=root,dc=vmt7" />
+	    <property name="password" value="PASSWORD" />
+	     <property name="pooled" value="true"/>
+    </bean>
+    <bean id="contextSource" class="org.springframework.ldap.pool.factory.PoolingContextSource">
+      <property name="contextSource" ref="ldapContextSource" />
+      <property name="dirContextValidator" ref="dirContextValidator" />
+      <property name="maxActive" value="10"/>
+      <property name="maxTotal" value="10"/>
+      <property name="maxIdle" value="10"/>
+   </bean>
+   <bean id="dirContextValidator"
+         class="org.springframework.ldap.pool.validation.DefaultDirContextValidator" />
+    <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+      <property name="contextSource" ref="ldapContextSource" />
+    </bean>
+    <bean id="umtClient" class="cn.vlabs.duckling.api.umt.rmi.userv7.UserService">
+    	<constructor-arg>
+    		<value>http://passporttest.escience.cn/services</value>
+    	</constructor-arg>
+    </bean>
+     <bean id="umtOauthClient" class="cn.vlabs.duckling.api.umt.rmi.oauth.OauthService">
+    	<constructor-arg>
+    		<value>${duckling.umt.service}</value>
+    	</constructor-arg>
+    </bean>
+	<bean id="cacheService" class="net.duckling.falcon.api.cache.impl.MemcachedCacheService" 
+			init-method="doInit" destroy-method="doDestroy">
+		<property name="memcachedURL" value="${memcached.url}"/>
+	</bean>
+    <import resource="test-controllers.xml" />
+</beans>

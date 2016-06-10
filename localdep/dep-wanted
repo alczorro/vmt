@@ -1,0 +1,6 @@
+ net.duckling:duckling-utils:jar:1.1.4b
+ com.octo:filter:jar:2.0
+ com.octo:jcaptcha-intergration:jar:2.0
+ net.duckling:umt-oauth2-client:jar:0.1.9
+ net.duckling.falcon:falcon-api:jar:0.3.4.snapshot
+ info.cukes:cucumber-deps:jar:1.0.0

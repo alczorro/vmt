@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd	
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- Scans within the base package of the application for @Components to configure as beans -->
+	<context:component-scan base-package="net.duckling.vmt">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>  
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>  
+    </context:component-scan>
+    <mvc:interceptors>
+		<!-- <mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" >
+				<property name="paramName" value="lang" />
+			</bean>  
+		</mvc:interceptor>
+		 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/user/**"/>
+			<bean class="net.duckling.vmt.web.intercepter.LoginIntercepter" >
+			</bean>  
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<!-- FileUpload Resolver -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- set the max upload size 10MB -->
+		<property name="maxUploadSize">
+			<value>10485760</value>
+		</property>
+		<property name="maxInMemorySize">
+			<value>1024</value>
+		</property>
+	</bean>
+	    <bean id="baseDAO" class="net.duckling.cloudy.db.simpleORM.repository.BaseDAO">
+    	<property name="namedParameterJdbcTemplate" ref="namedParameterJdbcTemplate"></property>
+    </bean>
+    <!-- ldap-jdbc-index -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+	    <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+	    <property name="jdbcUrl" value="jdbc:mysql://10.10.2.6/vmt_index?useUnicode=true"/>
+	    <property name="user" value="USER"/>
+	    <property name="password" value="PASSWORD"/>
+		<property name="initialPoolSize" value="10"/>
+		<property name="maxPoolSize" value="10"/>
+		<property name="minPoolSize" value="10"/>
+		<property name="acquireIncrement" value="5"/>
+		<property name="maxStatements" value="10"/>
+		<property name="preferredTestQuery" value="SELECT 1"/>
+		<property name="maxConnectionAge" value="3600"/>
+		<property name="testConnectionOnCheckout" value="true"/>
+	</bean>
+	<bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg>
+			<ref bean="dataSource"/>
+		</constructor-arg>
+	</bean>	
+</beans>
