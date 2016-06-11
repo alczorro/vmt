@@ -1,0 +1,22 @@
+Setup openldap for VMT
+======================
+
+Create the database:
+  sudo ldapadd -f vmt-init.ldif -Y EXTERNAL -H ldapi:/// 
+
+Create the initial entries:
+  sudo ldapadd -f vmt-init_data.ldif -Y EXTERNAL -H ldapi:/// 
+
+Check by querying:
+  ldapsearch -x -b "dc=vmtlocal,dc=duckling,dc=net"
+  -D "cn=admin,dc=vmtlocal,dc=duckling,dc=net" -W
+
+Add the schema:
+  sudo ldapadd -f vmt-ldap_schema.ldif -Y EXTERNAL -H ldapi:/// 
+
+If you have vmt-ldap_schema.ldif already, this conversation is not needed.
+In case, convert the schema file into .ldif:
+  mkdir tstdir
+  slaptest -f schema_to_ldif.conf -F tstdir/
+  (Edit the generated .ldif file. Finally, vmt-ldap_schema.ldif)
+

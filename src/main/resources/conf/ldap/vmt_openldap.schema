@@ -1,0 +1,304 @@
+#add by lvly
+#common schema
+#attribute domain:4.9.16.8.1
+attributetype (4.9.16.8.1.1 NAME 'vmt-name'
+        DESC 'abstract name'
+        SUBSTR caseExactSubstringsMatch
+	EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.1.2 NAME 'vmt-id'
+        DESC 'email'
+        SUBSTR caseExactSubstringsMatch
+	EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.1.3 NAME 'vmt-pinyin'
+        DESC 'email'
+        SUBSTR caseExactSubstringsMatch
+        EQUALITY caseIgnoreMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.1.4 NAME 'vmt-count'
+        DESC 'counts'
+        EQUALITY integerMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+	SINGLE-VALUE)
+
+attributetype (4.9.16.8.1.5 NAME 'vmt-root'
+        DESC 'counts'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SUP distinguishedName
+	SINGLE-VALUE)
+
+attributetype (4.9.16.8.1.6 NAME 'vmt-random'
+        DESC 'counts'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+
+attributetype (4.9.16.8.1.7 NAME 'vmt-visible'
+        DESC 'counts'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+
+attributetype (4.9.16.8.1.8 NAME 'vmt-from-date'
+        DESC 'counts'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+
+attributetype (4.9.16.8.1.9 NAME 'vmt-to-date'
+        DESC 'counts'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+
+
+#user schema
+#attribute domain:4.9.16.8.2
+#class domain:4.9.16.9.1
+attributetype (4.9.16.8.2.1 NAME 'vmt-umtId'
+        DESC 'umtId'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE)
+
+attributetype (4.9.16.8.2.2 NAME 'vmt-status'
+        DESC 'umtId'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE)
+
+attributetype (4.9.16.8.2.3 NAME 'vmt-search-index'
+        DESC 'email'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.2.4 NAME 'vmt-list-rank'
+        DESC 'email'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.2.5 NAME 'vmt-office'
+        DESC 'email'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.2.6 NAME 'vmt-office-phone'
+        DESC 'email'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.2.7 NAME 'vmt-title'
+        DESC 'email'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseExactSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+
+attributetype (4.9.16.8.2.8 NAME 'vmt-telephone'
+        DESC 'email'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.2.9 NAME 'vmt-sex'
+        DESC 'email'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.2.10 NAME 'vmt-logo'
+        DESC 'email'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+
+attributetype (4.9.16.8.2.11 NAME 'vmt-user-from'
+        DESC 'user from where ? coremail or umt'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.2.12 NAME 'vmt-account-status'
+        DESC 'user is locked or stoped'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.2.13 NAME 'vmt-expire-time'
+        DESC 'umtId'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+
+attributetype (4.9.16.8.2.14 NAME 'vmt-disable-dchat'
+        DESC 'umtId'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+
+attributetype (4.9.16.8.2.15 NAME 'vmt-custom-1'
+        DESC 'umtId'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+
+attributetype (4.9.16.8.2.16 NAME 'vmt-custom-2'
+        DESC 'umtId'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+
+objectclass (4.9.16.9.1 NAME 'vmt-user'
+        DESC 'vmt-user'
+        SUP top STRUCTURAL
+        MUST vmt-umtId
+        MAY (vmt-sex $vmt-disable-dchat$vmt-custom-1$vmt-custom-2 $vmt-expire-time $ vmt-telephone $ vmt-logo $ vmt-title $ vmt-office-phone $ vmt-office $ vmt-name $ vmt-search-index $ vmt-list-rank  $ vmt-id $ vmt-status $ vmt-pinyin $ vmt-root $ vmt-random $vmt-visible $vmt-user-from $ vmt-account-status))
+#node schema
+#classdomain:4.9.16.9.5
+#attributedomain:4.9.16.8.4
+attributetype (4.9.16.8.4.1 NAME 'vmt-current-display'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.4.2 NAME 'vmt-symbol'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.4.3 NAME 'vmt-from'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+
+objectclass (4.9.16.9.5 NAME 'vmt-node'
+	DESC ''
+	SUP top AUXILIARY
+	MAY (vmt-symbol $ vmt-current-display $ vmt-from))
+
+#privilege schema
+#classdomain:4.9.16.9.6
+#attributedomain:4.9.16.8.5
+attributetype (4.9.16.8.5.1 NAME 'vmt-privilege'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.5.2 NAME 'vmt-member-visible'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.5.3 NAME 'vmt-unconfirm-visible'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.5.4 NAME 'vmt-admin'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+
+
+
+objectclass (4.9.16.9.6 NAME 'vmt-setting'
+	DESC ''
+	SUP top AUXILIARY
+	MUST (vmt-privilege $ vmt-member-visible $vmt-unconfirm-visible)
+	MAY(vmt-admin))	
+
+#org schema
+#attribute domain:4.9.16.8.3
+#class domain:4.9.16.9.2
+attributetype (4.9.16.8.3.1 NAME 'vmt-creator'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE)
+
+attributetype (4.9.16.8.3.2 NAME 'vmt-domain'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+	SUBSTR caseExactSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.3.3 NAME 'vmt-is-coremail'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+
+attributetype (4.9.16.8.3.4 NAME 'vmt-is-cas'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+
+attributetype (4.9.16.8.3.5 NAME 'vmt-mobile-logo'
+        DESC 'email'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.3.6 NAME 'vmt-pc-logo'
+        DESC 'email'
+        EQUALITY caseIgnoreMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15)
+
+attributetype (4.9.16.8.3.7 NAME 'vmt-apply-open-dchat'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+
+attributetype (4.9.16.8.3.8 NAME 'vmt-open-dchat'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+attributetype (4.9.16.8.3.9 NAME 'vmt-apps-copy'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+attributetype (4.9.16.8.3.10 NAME 'vmt-is-apps-open'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+attributetype (4.9.16.8.3.11 NAME 'vmt-hide-mobile'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+attributetype (4.9.16.8.3.12 NAME 'vmt-description'
+        DESC 'who create this'
+        EQUALITY caseExactMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE)
+
+
+objectclass (4.9.16.9.2  NAME 'vmt-org'
+        DESC 'CstnetOrginazation'
+        SUP top STRUCTURAL
+        MUST (vmt-name $ vmt-creator )
+        MAY (userPassword $vmt-hide-mobile $vmt-description $vmt-apps-copy$vmt-is-apps-open$ vmt-apply-open-dchat $ vmt-open-dchat $ vmt-mobile-logo $ vmt-pc-logo $ vmt-domain $ vmt-is-coremail $ vmt-is-cas  $ vmt-count  $ vmt-logo $ vmt-from-date $ vmt-to-date))
+
+#department schema
+#class domain:4.9.16.9.3
+objectclass (4.9.16.9.3  NAME 'vmt-depart'
+        DESC 'CstnetDepartment'
+        SUP top STRUCTURAL
+        MUST (vmt-name $ vmt-creator )
+	MAY (vmt-list-rank $ vmt-visible))
+
+#group schema
+#class domain:4.9.16.9.4
+objectclass (4.9.16.9.4  NAME 'vmt-group'
+        DESC 'CstnetGroup'
+        SUP top STRUCTURAL
+        MUST (vmt-name $ vmt-creator)
+        MAY (userPassword$vmt-hide-mobile$vmt-description$vmt-apps-copy$vmt-is-apps-open $ vmt-apply-open-dchat $ vmt-open-dchat  $ vmt-count $ vmt-mobile-logo $ vmt-pc-logo $ vmt-logo $ vmt-from-date $ vmt-to-date))
+

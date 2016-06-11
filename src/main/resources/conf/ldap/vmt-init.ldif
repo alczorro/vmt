@@ -1,0 +1,19 @@
+#
+# init database for VMT
+# pass: 4duckling
+#
+dn: olcDatabase=hdb, cn=config
+objectClass: olcDatabaseConfig
+objectClass: olcHdbConfig
+olcDatabase: hdb
+olcSuffix: dc=vmtlocal,dc=duckling,dc=net
+olcDbDirectory: /media/appleii/rt/ldap-data
+olcRootDN: cn=admin,dc=vmtlocal,dc=duckling,dc=net
+olcRootPW: {SSHA}Me+Wt6StrxOYGFDnFKFnTqMTn3UUUiH2
+olcLastMod: TRUE
+olcDbCheckpoint: 512 30
+olcDbConfig: set_cachesize 0 2097152 0
+olcDbConfig: set_lk_max_objects 1500
+olcDbConfig: set_lk_max_locks 1500
+olcDbConfig: set_lk_max_lockers 1500
+olcDbIndex: objectClass eq

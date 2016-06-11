@@ -1,0 +1,16 @@
+#
+# Initial entries for vmt
+#
+dn: dc=vmtlocal,dc=duckling,dc=net
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+o: duckling.net
+dc: vmtlocal
+
+dn: cn=admin,dc=vmtlocal,dc=duckling,dc=net
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+cn: admin
+description: LDAP administrator
+userPassword:: e1NTSEF9RzB0a3FoUWNUWU1wMCt5VUhaR0RIYnhMVS9aN2hGQTQ=
