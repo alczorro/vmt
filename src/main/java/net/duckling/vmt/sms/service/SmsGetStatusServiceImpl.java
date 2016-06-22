@@ -49,7 +49,7 @@ public class SmsGetStatusServiceImpl implements ISmsGetStatusService {
     public void pullSmsStatus() {
 	String baseUrl = config.getSmsBaseUrl();
 	if ("null".equalsIgnoreCase(baseUrl)) {
-	    LOG.error("Sms not set and will be skipped.");
+	    LOG.debug("Sms not set and will be skipped.");
 	    return;
 	}
 
