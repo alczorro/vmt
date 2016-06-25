@@ -7,7 +7,7 @@ objectClass: olcDatabaseConfig
 objectClass: olcHdbConfig
 olcDatabase: hdb
 olcSuffix: dc=vmtlocal,dc=duckling,dc=net
-olcDbDirectory: /media/appleii/rt/ldap-data
+olcDbDirectory: /dvlp/rt/ldap-data
 olcRootDN: cn=admin,dc=vmtlocal,dc=duckling,dc=net
 olcRootPW: {SSHA}Me+Wt6StrxOYGFDnFKFnTqMTn3UUUiH2
 olcLastMod: TRUE

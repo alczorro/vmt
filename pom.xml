@@ -314,11 +314,11 @@
       <artifactId>mail</artifactId>
       <version>1.4.5</version>
     </dependency>
-    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-all</artifactId>
-      <version>1.7.6</version>
-    </dependency>
+    <!-- <dependency> -->
+    <!--   <groupId>org.codehaus.jackson</groupId> -->
+    <!--   <artifactId>jackson-all</artifactId> -->
+    <!--   <version>1.7.6</version> -->
+    <!-- </dependency> -->
 
     <dependency>
       <groupId>org.json.simple</groupId>
